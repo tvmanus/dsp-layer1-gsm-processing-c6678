@@ -1,0 +1,17 @@
+myBoard_Core4_m/Platform.xdc
+myBoard_Core4_m/Platform.xs
+myBoard_Core4_m/config.bld
+myBoard_Core4_m/package/.vers_b160
+myBoard_Core4_m/package/.vers_g180
+myBoard_Core4_m/package/.vers_r170
+myBoard_Core4_m/package/.xdc-z63
+myBoard_Core4_m/package/build.cfg
+myBoard_Core4_m/package/myBoard_Core4_m.ccs
+myBoard_Core4_m/package/myBoard_Core4_m.class
+myBoard_Core4_m/package/myBoard_Core4_m.java
+myBoard_Core4_m/package/myBoard_Core4_m.sch
+myBoard_Core4_m/package/package.bld.xml
+myBoard_Core4_m/package/package.defs.h
+myBoard_Core4_m/package/package_myBoard_Core4_m.c
+myBoard_Core4_m/package.bld
+myBoard_Core4_m/package.xdc

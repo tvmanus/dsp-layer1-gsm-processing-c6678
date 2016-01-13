@@ -1,0 +1,48 @@
+################################################################################
+# Automatically-generated file. Do not edit!
+################################################################################
+
+# Each subdirectory must supply rules for building sources it contributes
+Burst.obj: D:/WorkLocation/Code_736/Code_736/src/steLib/gsmutil/src/Burst.c $(GEN_OPTS) $(GEN_HDRS)
+	@echo 'Building file: $<'
+	@echo 'Invoking: C6000 Compiler'
+	"D:/TInew/ccsv5/tools/compiler/c6000_7.4.4/bin/cl6x" -mv6600 --abi=eabi -O2 -g --include_path="D:/WorkLocation/Code_736/Code_736/src/steLib/gsmutil/include" --include_path="D:/WorkLocation/Code_736/Code_736/src/include" --include_path="D:/WorkLocation/Code_736/Code_736/src/3rdParty/gsmL1/include" --include_path="D:/WorkLocation/Code_736/Code_736/src/stedrv/platform/include" --include_path="D:/WorkLocation/Code_736/Code_736/src/stemgr/dataif/include" --include_path="D:/WorkLocation/Code_736/Code_736/src/stemgr/arfcn/include" --include_path="D:/WorkLocation/Code_736/Code_736/src/steLib/commandif/include" --include_path="D:/WorkLocation/Code_736/Code_736/src/stemgr/include" --include_path="D:/WorkLocation/Code_736/Code_736/src/steLib/genutil/include" --include_path="D:/WorkLocation/Code_736/Code_736/src/steLib/gsmutil" --include_path="D:/TInew/xdctools_3_25_03_72/packages" --include_path="D:/TInew/ccsv5/tools/compiler/c6000_7.4.4/include" --include_path="D:/TInew/pdk_C6678_1_1_2_6/packages/ti/csl" --include_path="D:/TInew/pdk_C6678_1_1_2_6/packages" --include_path="D:/TInew/bios_6_37_02_27/packages" --include_path="D:/TInew/uia_1_03_01_08/packages" --gcc --define=_DEBUG --define=_TMS320C6400 --display_error_number --diag_warning=225 --opt_for_speed=3 --preproc_with_compile --preproc_dependency="Burst.pp" $(GEN_OPTS__FLAG) "$<"
+	@echo 'Finished building: $<'
+	@echo ' '
+
+Clock.obj: D:/WorkLocation/Code_736/Code_736/src/steLib/gsmutil/src/Clock.c $(GEN_OPTS) $(GEN_HDRS)
+	@echo 'Building file: $<'
+	@echo 'Invoking: C6000 Compiler'
+	"D:/TInew/ccsv5/tools/compiler/c6000_7.4.4/bin/cl6x" -mv6600 --abi=eabi -O2 -g --include_path="D:/WorkLocation/Code_736/Code_736/src/steLib/gsmutil/include" --include_path="D:/WorkLocation/Code_736/Code_736/src/include" --include_path="D:/WorkLocation/Code_736/Code_736/src/3rdParty/gsmL1/include" --include_path="D:/WorkLocation/Code_736/Code_736/src/stedrv/platform/include" --include_path="D:/WorkLocation/Code_736/Code_736/src/stemgr/dataif/include" --include_path="D:/WorkLocation/Code_736/Code_736/src/stemgr/arfcn/include" --include_path="D:/WorkLocation/Code_736/Code_736/src/steLib/commandif/include" --include_path="D:/WorkLocation/Code_736/Code_736/src/stemgr/include" --include_path="D:/WorkLocation/Code_736/Code_736/src/steLib/genutil/include" --include_path="D:/WorkLocation/Code_736/Code_736/src/steLib/gsmutil" --include_path="D:/TInew/xdctools_3_25_03_72/packages" --include_path="D:/TInew/ccsv5/tools/compiler/c6000_7.4.4/include" --include_path="D:/TInew/pdk_C6678_1_1_2_6/packages/ti/csl" --include_path="D:/TInew/pdk_C6678_1_1_2_6/packages" --include_path="D:/TInew/bios_6_37_02_27/packages" --include_path="D:/TInew/uia_1_03_01_08/packages" --gcc --define=_DEBUG --define=_TMS320C6400 --display_error_number --diag_warning=225 --opt_for_speed=3 --preproc_with_compile --preproc_dependency="Clock.pp" $(GEN_OPTS__FLAG) "$<"
+	@echo 'Finished building: $<'
+	@echo ' '
+
+GSMTime.obj: D:/WorkLocation/Code_736/Code_736/src/steLib/gsmutil/src/GSMTime.c $(GEN_OPTS) $(GEN_HDRS)
+	@echo 'Building file: $<'
+	@echo 'Invoking: C6000 Compiler'
+	"D:/TInew/ccsv5/tools/compiler/c6000_7.4.4/bin/cl6x" -mv6600 --abi=eabi -O2 -g --include_path="D:/WorkLocation/Code_736/Code_736/src/steLib/gsmutil/include" --include_path="D:/WorkLocation/Code_736/Code_736/src/include" --include_path="D:/WorkLocation/Code_736/Code_736/src/3rdParty/gsmL1/include" --include_path="D:/WorkLocation/Code_736/Code_736/src/stedrv/platform/include" --include_path="D:/WorkLocation/Code_736/Code_736/src/stemgr/dataif/include" --include_path="D:/WorkLocation/Code_736/Code_736/src/stemgr/arfcn/include" --include_path="D:/WorkLocation/Code_736/Code_736/src/steLib/commandif/include" --include_path="D:/WorkLocation/Code_736/Code_736/src/stemgr/include" --include_path="D:/WorkLocation/Code_736/Code_736/src/steLib/genutil/include" --include_path="D:/WorkLocation/Code_736/Code_736/src/steLib/gsmutil" --include_path="D:/TInew/xdctools_3_25_03_72/packages" --include_path="D:/TInew/ccsv5/tools/compiler/c6000_7.4.4/include" --include_path="D:/TInew/pdk_C6678_1_1_2_6/packages/ti/csl" --include_path="D:/TInew/pdk_C6678_1_1_2_6/packages" --include_path="D:/TInew/bios_6_37_02_27/packages" --include_path="D:/TInew/uia_1_03_01_08/packages" --gcc --define=_DEBUG --define=_TMS320C6400 --display_error_number --diag_warning=225 --opt_for_speed=3 --preproc_with_compile --preproc_dependency="GSMTime.pp" $(GEN_OPTS__FLAG) "$<"
+	@echo 'Finished building: $<'
+	@echo ' '
+
+L1FEC.obj: D:/WorkLocation/Code_736/Code_736/src/steLib/gsmutil/src/L1FEC.c $(GEN_OPTS) $(GEN_HDRS)
+	@echo 'Building file: $<'
+	@echo 'Invoking: C6000 Compiler'
+	"D:/TInew/ccsv5/tools/compiler/c6000_7.4.4/bin/cl6x" -mv6600 --abi=eabi -O2 -g --include_path="D:/WorkLocation/Code_736/Code_736/src/steLib/gsmutil/include" --include_path="D:/WorkLocation/Code_736/Code_736/src/include" --include_path="D:/WorkLocation/Code_736/Code_736/src/3rdParty/gsmL1/include" --include_path="D:/WorkLocation/Code_736/Code_736/src/stedrv/platform/include" --include_path="D:/WorkLocation/Code_736/Code_736/src/stemgr/dataif/include" --include_path="D:/WorkLocation/Code_736/Code_736/src/stemgr/arfcn/include" --include_path="D:/WorkLocation/Code_736/Code_736/src/steLib/commandif/include" --include_path="D:/WorkLocation/Code_736/Code_736/src/stemgr/include" --include_path="D:/WorkLocation/Code_736/Code_736/src/steLib/genutil/include" --include_path="D:/WorkLocation/Code_736/Code_736/src/steLib/gsmutil" --include_path="D:/TInew/xdctools_3_25_03_72/packages" --include_path="D:/TInew/ccsv5/tools/compiler/c6000_7.4.4/include" --include_path="D:/TInew/pdk_C6678_1_1_2_6/packages/ti/csl" --include_path="D:/TInew/pdk_C6678_1_1_2_6/packages" --include_path="D:/TInew/bios_6_37_02_27/packages" --include_path="D:/TInew/uia_1_03_01_08/packages" --gcc --define=_DEBUG --define=_TMS320C6400 --display_error_number --diag_warning=225 --opt_for_speed=3 --preproc_with_compile --preproc_dependency="L1FEC.pp" $(GEN_OPTS__FLAG) "$<"
+	@echo 'Finished building: $<'
+	@echo ' '
+
+TDFrm.obj: D:/WorkLocation/Code_736/Code_736/src/steLib/gsmutil/src/TDFrm.c $(GEN_OPTS) $(GEN_HDRS)
+	@echo 'Building file: $<'
+	@echo 'Invoking: C6000 Compiler'
+	"D:/TInew/ccsv5/tools/compiler/c6000_7.4.4/bin/cl6x" -mv6600 --abi=eabi -O2 -g --include_path="D:/WorkLocation/Code_736/Code_736/src/steLib/gsmutil/include" --include_path="D:/WorkLocation/Code_736/Code_736/src/include" --include_path="D:/WorkLocation/Code_736/Code_736/src/3rdParty/gsmL1/include" --include_path="D:/WorkLocation/Code_736/Code_736/src/stedrv/platform/include" --include_path="D:/WorkLocation/Code_736/Code_736/src/stemgr/dataif/include" --include_path="D:/WorkLocation/Code_736/Code_736/src/stemgr/arfcn/include" --include_path="D:/WorkLocation/Code_736/Code_736/src/steLib/commandif/include" --include_path="D:/WorkLocation/Code_736/Code_736/src/stemgr/include" --include_path="D:/WorkLocation/Code_736/Code_736/src/steLib/genutil/include" --include_path="D:/WorkLocation/Code_736/Code_736/src/steLib/gsmutil" --include_path="D:/TInew/xdctools_3_25_03_72/packages" --include_path="D:/TInew/ccsv5/tools/compiler/c6000_7.4.4/include" --include_path="D:/TInew/pdk_C6678_1_1_2_6/packages/ti/csl" --include_path="D:/TInew/pdk_C6678_1_1_2_6/packages" --include_path="D:/TInew/bios_6_37_02_27/packages" --include_path="D:/TInew/uia_1_03_01_08/packages" --gcc --define=_DEBUG --define=_TMS320C6400 --display_error_number --diag_warning=225 --opt_for_speed=3 --preproc_with_compile --preproc_dependency="TDFrm.pp" $(GEN_OPTS__FLAG) "$<"
+	@echo 'Finished building: $<'
+	@echo ' '
+
+TDFrmTbl.obj: D:/WorkLocation/Code_736/Code_736/src/steLib/gsmutil/src/TDFrmTbl.c $(GEN_OPTS) $(GEN_HDRS)
+	@echo 'Building file: $<'
+	@echo 'Invoking: C6000 Compiler'
+	"D:/TInew/ccsv5/tools/compiler/c6000_7.4.4/bin/cl6x" -mv6600 --abi=eabi -O2 -g --include_path="D:/WorkLocation/Code_736/Code_736/src/steLib/gsmutil/include" --include_path="D:/WorkLocation/Code_736/Code_736/src/include" --include_path="D:/WorkLocation/Code_736/Code_736/src/3rdParty/gsmL1/include" --include_path="D:/WorkLocation/Code_736/Code_736/src/stedrv/platform/include" --include_path="D:/WorkLocation/Code_736/Code_736/src/stemgr/dataif/include" --include_path="D:/WorkLocation/Code_736/Code_736/src/stemgr/arfcn/include" --include_path="D:/WorkLocation/Code_736/Code_736/src/steLib/commandif/include" --include_path="D:/WorkLocation/Code_736/Code_736/src/stemgr/include" --include_path="D:/WorkLocation/Code_736/Code_736/src/steLib/genutil/include" --include_path="D:/WorkLocation/Code_736/Code_736/src/steLib/gsmutil" --include_path="D:/TInew/xdctools_3_25_03_72/packages" --include_path="D:/TInew/ccsv5/tools/compiler/c6000_7.4.4/include" --include_path="D:/TInew/pdk_C6678_1_1_2_6/packages/ti/csl" --include_path="D:/TInew/pdk_C6678_1_1_2_6/packages" --include_path="D:/TInew/bios_6_37_02_27/packages" --include_path="D:/TInew/uia_1_03_01_08/packages" --gcc --define=_DEBUG --define=_TMS320C6400 --display_error_number --diag_warning=225 --opt_for_speed=3 --preproc_with_compile --preproc_dependency="TDFrmTbl.pp" $(GEN_OPTS__FLAG) "$<"
+	@echo 'Finished building: $<'
+	@echo ' '
+
+

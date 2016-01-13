@@ -1,0 +1,38 @@
+myBoard_TRS.zip: Platform.xdc
+Platform.xdc:
+myBoard_TRS.zip: Platform.xs
+Platform.xs:
+myBoard_TRS.zip: config.bld
+config.bld:
+myBoard_TRS.zip: package/.vers_b150
+package/.vers_b150:
+myBoard_TRS.zip: package/.vers_g180
+package/.vers_g180:
+myBoard_TRS.zip: package/.vers_r170
+package/.vers_r170:
+myBoard_TRS.zip: package/.xdc-y25
+package/.xdc-y25:
+myBoard_TRS.zip: package/build.cfg
+package/build.cfg:
+myBoard_TRS.zip: package/myBoard_TRS.ccs
+package/myBoard_TRS.ccs:
+myBoard_TRS.zip: package/myBoard_TRS.class
+package/myBoard_TRS.class:
+myBoard_TRS.zip: package/myBoard_TRS.java
+package/myBoard_TRS.java:
+myBoard_TRS.zip: package/myBoard_TRS.sch
+package/myBoard_TRS.sch:
+myBoard_TRS.zip: package/package.bld.xml
+package/package.bld.xml:
+myBoard_TRS.zip: package/package.defs.h
+package/package.defs.h:
+myBoard_TRS.zip: package/package.ext.xml
+package/package.ext.xml:
+myBoard_TRS.zip: package/package.rel.dot
+package/package.rel.dot:
+myBoard_TRS.zip: package/package_myBoard_TRS.c
+package/package_myBoard_TRS.c:
+myBoard_TRS.zip: package.bld
+package.bld:
+myBoard_TRS.zip: package.xdc
+package.xdc:

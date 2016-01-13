@@ -1,0 +1,1273 @@
+#include<ti\sysbios\knl\Task.h>
+#include "L1Manager.h"
+#include "MemMgr.h"
+
+#include "CmdSim.h"
+#include "PayloadSim.h"
+
+#include "IIPC.h"
+#include <ti/ipc/MessageQ.h>
+#include "Hash.h"
+#include "gsm_toolbox.h"
+#include "logchan.h"
+#include "TDFrmTbl.h"
+#include "Datapkt.h"
+
+#include "GenUtil.h"
+#include "DDCRx.h"
+#include "profile_log.h"
+#include "ste_msgQ.h"
+#include "srio.h"
+#include "UsrConfig.h"
+//#define ENABLE_L1LOG
+
+
+#pragma DATA_SECTION(rxscratchM1, ".dataL1D")
+#pragma DATA_ALIGN (rxscratchM1, 256);
+INT32 rxscratchM1[1][8 * 256];
+#pragma DATA_SECTION(rxscratchM2, ".dataL1D")
+#pragma DATA_ALIGN (rxscratchM2, 256);
+INT32 rxscratchM2[1][ 8 * 256];
+#pragma DATA_SECTION(txscratchM1, ".far:txscratch1")
+#pragma DATA_ALIGN (txscratchM1, 256);
+INT32 txscratchM1[1][2 * 256];
+#pragma DATA_SECTION(txscratchM2, ".far:txscratch2")
+#pragma DATA_ALIGN (txscratchM2, 256);
+INT32 txscratchM2[1][ 1 * 256];
+
+
+// common function for all instance of L1 manager
+
+static VOID 			  L1Manager_SendL2PacketInfo(L2PacketInfo *pL2PacketInfo);
+
+extern UINT32		nImmAsgnmnt;
+extern UINT32		nImmAsgnmntEx;
+
+
+UINT64	nSeqNum =0;
+
+#ifndef OLD_IIPC
+extern MessageQ_Handle  messageQ[MAX_QUES];
+extern BOOL MesgQ_Initialized;
+#endif /* OLD_IIPC */
+
+typedef struct GSML1TxManager
+{
+	L1Manager	*pL1Manager;
+	UINT8		nTxManager;
+}GSML1TxManager;
+
+static VOID L1Manager_Start( L1Manager *pThis);
+static VOID L1Manager_SetCore(L1Manager *pThis, DSP_CORE eCore);
+static VOID L1Manager_SendCommand(L1Manager *pThis, UINT8 nChildID, Packet *pPacket);
+static VOID L1Manager_SendBurstInfo(L1Manager *pThis, BurstInfo *pBurstInfo);
+static VOID L1Manager_FreeCmdPkt(L1Manager *pThis, Packet *pPacket);
+static VOID L1Manager_FreeBurst(L1Manager *pThis, Burst *pBurst);
+static VOID L1Manager_SendL2Packet(struct L1Manager *pThis, Packet2 *pPacket);
+static	Packet 		*L1Manager_GetCmdPktPtr(struct L1Manager *pThis );
+static	BurstInfo   *L1Manager_GetBurstInfoPtr(struct L1Manager *pThis);
+static	Packet2 	*L1Manager_GetBurstPtr(struct L1Manager *pThis);
+static VOID L1Manager_RequestBurstInfo(L1Manager* pThis, RxManager *pRxManager, DIRECTION eDir, UINT8 nTN);
+static VOID L1Manager_FlushL2Packet(struct L1Manager* pThis);
+static VOID L1Manager_OnCommand( L1Manager *pThis);
+static VOID L1Manager_OnBurstData( L1Manager *pThis);
+/*static VOID L1Manager_OnEveryFrame( L1Manager *pThis, UINT8 nTxManager);*/
+static VOID L1Manager_DoCommandProcessing( L1Manager *pThis, Packet *pRxPacket);
+static VOID L1Manager_OnBurstInfoReq(L1Manager *pThis);
+
+
+#ifdef OLD_IIPC
+static L2PacketInfo     *L1Manager_GetL2PacketInfoPtr(DSP_CORE eCore);
+static VOID 	L1Manager_SendBurstToFPGAPtr(BurstToFPGAInfo *pBurstToFPGAInfo);
+static VOID	    L1Manager_DropMonitoringChannel(struct L1Manager *pThis, Packet *pPacket);
+//static VOID 	L1Manager_InitBurstToFPGAInfo(VOID);
+static	BurstToFPGAInfo     *L1Manager_GetBurstToFPGAPtr(VOID);
+#endif /* OLD_IIPC */
+
+static VOID	L1Manager_SetL2MsgKey(L1Manager *pThis,UINT8 TxMgriD,UINT16 nArfcn, UINT8 nTS, DIRECTION eDir);
+static VOID L1Manager_ResetL2MsgKey(L1Manager *pThis, UINT8 TxMgriD);
+static  VOID L1Manager_ResetTRX(struct L1Manager *pThis, UINT16 nBeaconARFCN);
+#ifdef ENABLE_L1LOG
+static VOID L1Manager_DumpRecvrInfo(L1Manager *pThis);
+#endif
+
+#ifdef  DECODING_STATUS
+static VOID L1Manager_DumpRecvrInfo(L1Manager *pThis);
+extern VOID RxManager_DumpReceiverLogs(RxManager *pThis);
+#endif
+
+#ifdef SINGLE_CORE_OPERATION
+BOOL bEnableLogging= FALSE;
+#endif
+
+//#define DEBUG_BURST
+
+#ifdef DEBUG_BURST
+extern COMPLEX16 gTestSamples[64][312];
+#endif
+
+UINT64 gBurstReqNo = 0;
+
+#if 0
+void Clk_isr_print(void)
+{
+	uint32_t counter1, counter2;
+	uint32_t timer;
+
+	CSL_EMIF4F_GetPerfCounters(&counter1,&counter2);
+	timer = CSL_EMIF4F_GetPerfCounterTime();
+#ifdef Timing
+	static UINT8 Round = 0;
+	if(Round == 0)
+	{
+		hGpio->BANK_REGISTERS[0].SET_DATA = 1 << bitPos;
+		Round = 1;
+	}
+	else
+	{
+		hGpio->BANK_REGISTERS[0].CLR_DATA = 1 << bitPos;
+		Round = 0;
+	}
+#endif
+	Log_print3(Diags_USER1,"T: %u C1: %u C2: %u",timer,counter1,counter2);
+	//Log_print6(Diags_USER1, "CORE0JR: %d JP: %d CmdTRX: %d valPack: %d RecPack: %d C1C2: %d",C0_TaskReceiver,C0_TaskProcessor,C0_CmdTRX,C0_ValidatePkt,C0_ReceivePkt,C0_RXc1c2);
+	//Log_print4(Diags_USER1, "CORE0IPU: %d log: %d IPCTX: %d IPCRX: %d",C0_DSP_to_IPU,C0_Etherlog,C0_IIPC_TX,C0_IIPC_RX);
+	//Log_print6(Diags_USER1, "CORE1Data: %d Cmd: %d Burstinfo: %d L2Pack: %d IPCTX: %d IPCRX: %d",C1_data,C1_Cmd,C1_BurstInfo,C1_SendL2,C1_IIPC_TX,C1_IIPC_RX);
+	//Log_print6(Diags_USER1, "CORE2Data: %d Cmd: %d Burstinfo: %d L2Pack: %d IPCTX: %d IPCRX: %d",C2_data,C2_Cmd,C2_BurstInfo,C2_SendL2,C2_IIPC_TX,C2_IIPC_RX);
+}
+#endif
+
+static VOID L1Manager_TimerIsr(L1Manager *pThis)
+{
+	static char count =0;
+	if( pThis->eCore == CORE_1)
+		CORE1_ACTIVE = TRUE;
+	else if( pThis->eCore == CORE_2)
+		CORE2_ACTIVE = TRUE;
+
+	else if( pThis->eCore == CORE_3)
+			CORE3_ACTIVE = TRUE;
+
+	else if( pThis->eCore == CORE_4)
+			CORE4_ACTIVE = TRUE;
+
+	else if( pThis->eCore == CORE_5)
+			CORE5_ACTIVE = TRUE;
+
+	else if( pThis->eCore == CORE_6)
+			CORE6_ACTIVE = TRUE;
+
+	else if( pThis->eCore == CORE_7)
+			CORE7_ACTIVE = TRUE;
+	else
+	{
+		LOG_TRACE0("Wrong CORE number");
+		ASSERT_FATAL();
+	}
+	count ++;
+	if(count%20 == 0)
+	{
+	Event_post(pThis->SigReceiverStatus,Event_Id_01);
+	count=0;
+	}
+}
+
+static VOID L1ManageroBurstInfoReqTask( VOID *pParam)
+{
+	while(1)
+	{
+		L1Manager_OnBurstInfoReq((L1Manager*)pParam);
+	}
+}
+
+static VOID L1ManagerCommandTask( VOID *pParam)
+{
+
+	while(1)
+	{
+
+		L1Manager_OnCommand((L1Manager*)pParam);
+	}
+}
+
+static VOID L1ManagerDataTask( VOID *pParam)
+{
+	while(1)
+	{
+		L1Manager_OnBurstData( (L1Manager*)pParam);
+	}
+}
+
+#if 0
+static VOID L1Manager_SendL2PktTask(L1Manager *pThis)
+{
+	while(1)
+	{
+		L1Manager_SendL2Pkt(pThis);
+	}
+}
+#endif
+
+#ifdef DECODING_STATUS
+static VOID L1ManagerRecvStatusTask(L1Manager *pThis)
+{
+	while(1)
+	{
+		L1Manager_DumpRecvrInfo(pThis);
+	}
+
+}
+#endif
+
+GSML1TxManager	oGSML1TxManager[MAX_TX_MGR];
+extern DemodData_Receiver ODemodData_Receiver;
+
+VOID L1Manager_Init( L1Manager *pThis, DSP_CORE eCore)
+{
+
+	UINT8 nRxManager;
+	CHAR  cBuffer[512];
+	UINT8 PktType;
+	UINT32		nIndex;
+
+	TDFrmTbl_Init();
+
+	pThis->eCore 			= 	eCore;
+	pThis->Start			=	L1Manager_Start;
+	pThis->SetCore 			= 	L1Manager_SetCore;
+	pThis->SendCommand 		= 	L1Manager_SendCommand;
+	pThis->SendBurstInfo 	= 	L1Manager_SendBurstInfo;
+	pThis->FreeCmdPkt 		= 	L1Manager_FreeCmdPkt;
+	pThis->FreeBurst	 	= 	L1Manager_FreeBurst;
+	pThis->SendL2Packet		=	L1Manager_SendL2Packet;
+	pThis->GetCmdPktPtr		=	L1Manager_GetCmdPktPtr;
+	pThis->GetBurstInfoPtr	=	L1Manager_GetBurstInfoPtr;
+	pThis->GetBurstPtr		=	L1Manager_GetBurstPtr;
+	pThis->RequestBurstInfo =   L1Manager_RequestBurstInfo;
+	pThis->FlushL2Packet	=	L1Manager_FlushL2Packet;
+	pThis->GetBurstToFPGAPtr=   NULL;
+	pThis->SendBurstToFPGAPtr=  NULL;
+	pThis->GetL2PacketInfoPtr	= NULL;
+	pThis->SetL2MsgKey		 = L1Manager_SetL2MsgKey;
+	pThis->ResetL2MsgKey	 = L1Manager_ResetL2MsgKey;
+
+
+	pThis->SendL2PacketInfo	 = L1Manager_SendL2PacketInfo;
+	pThis->ResetTRX			 =	L1Manager_ResetTRX;
+
+
+	for(nIndex = 0; nIndex < 8*256; nIndex++)
+	{
+		rxscratchM1[0][nIndex] = 0XAABBCCDD;
+		rxscratchM2[0][nIndex] = 0X11223344;
+	}
+	
+	memset(&ODemodData_Receiver,0,sizeof(ODemodData_Receiver));
+
+	LOG_TRACE0("Inside L1Manager Init");
+
+	for(nRxManager = 0; nRxManager < MAX_RX_MGR; nRxManager++)
+	{
+		RxManager_Init(&pThis->oRxManager[nRxManager], (SCRATCH*)&rxscratchM1[0][0], (SCRATCH*)&rxscratchM2[0][0], nRxManager, pThis);
+	}
+
+	sprintf((char*)cBuffer, "%s", "T_L1MgrCmd");
+	Task_Init1(&pThis->oCommandTask, (char*)&cBuffer[0], (pfnTask)L1ManagerCommandTask, pThis, TSK_STACKSIZE_2048, STE_TASK_DEFAULT_PRI);
+	
+	sprintf((char*)cBuffer, "%s", "T_L1RxMgrData");
+	Task_Init1(&pThis->oDataTask, (char*)&cBuffer[0], (pfnTask)L1ManagerDataTask, pThis, TSK_STACKSIZE_8192, STE_TASK_DEFAULT_PRI);
+
+	sprintf((char*)cBuffer, "%s", "T_L1RxBurstInfo");
+	Task_Init1(&pThis->oBurstInfoReqTask, (char*)&cBuffer[0], (pfnTask)L1ManageroBurstInfoReqTask, pThis, TSK_STACKSIZE_2048, STE_TASK_DEFAULT_PRI);
+
+#ifdef DECODING_STATUS
+	sprintf((char*)cBuffer, "%s", "T_L1RecvStatus");
+	Task_Init1(&pThis->oReceiverStatus, (char*)&cBuffer[0], (pfnTask)L1ManagerRecvStatusTask, pThis, TSK_STACKSIZE_2048, STE_TASK_DEFAULT_PRI);
+#endif
+	//Reset the Flags
+	for(PktType = 0; PktType < DATAIF_MAX_PACKET_TYPE; PktType++)
+	{
+		pThis->PacketDetails[PktType].bPktCreated = FALSE;
+	}
+
+	pThis->SigReceiverStatus = Event_create(NULL,NULL);
+    if (pThis->SigReceiverStatus == NULL)
+    {
+    	LOG_FATAL("Event create failed");
+    	ASSERT_FATAL();
+    }
+	//Timer Initialization
+
+	Timer_Init(&pThis->oTimerUs, CSL_TMR_10,0x7A120, CSL_TMR_ENAMODE_CONT,
+				(Intr_Handler)L1Manager_TimerIsr, pThis, INTR_ITEM_TIMER_2); // 0x1207
+
+}
+
+static VOID L1Manager_FreeCmdPkt(L1Manager *pThis, Packet *pPacket)
+{
+		Free(0,pPacket);
+}
+static VOID L1Manager_FreeBurst(L1Manager *pThis, Burst *pBurst)
+{
+		Free_REG2(0,pBurst);
+}
+
+#ifdef DECODING_STATUS
+VOID L1Manager_DumpRecvrInfo(L1Manager *pThis)
+{
+	UINT8	i = 0;
+	Event_pend(pThis->SigReceiverStatus,Event_Id_01,Event_Id_NONE,BIOS_WAIT_FOREVER); //20000 ms -> 10 secs
+
+	for(i=0;i<MAX_RX_MGR;i++)
+	{
+		if(pThis->oRxManager[i].bON == TRUE)
+		{
+			RxManager_DumpReceiverLogs(&pThis->oRxManager[i]);
+		}
+	}
+
+}
+#endif
+
+VOID L1Manager_SetCore(L1Manager *pThis, DSP_CORE eCore)
+{
+	pThis->eCore = eCore;
+}
+
+VOID L1Manager_Start( L1Manager *pThis)
+{
+	UINT8 nRxManager;
+	
+	for(nRxManager = 0; nRxManager < MAX_RX_MGR; nRxManager++)
+	{
+		RxManager_Start(&pThis->oRxManager[nRxManager]);
+		RxManager_SetCore(&pThis->oRxManager[nRxManager], pThis->eCore);
+
+	}	
+	
+	Task_Start(&pThis->oCommandTask);
+	Task_Start(&pThis->oDataTask);
+	Task_Start(&pThis->oBurstInfoReqTask);
+
+#ifdef DECODING_STATUS
+	Task_Start(&pThis->oReceiverStatus);
+#endif
+
+	//Start the Timer
+	Timer_Start(&pThis->oTimerUs);
+
+
+}
+
+#if 0
+VOID L1Manager_OnL2PakRcvd (L1Manager *pThis)
+{
+
+	RealDataTx1  *pRealL2Pak;
+	Packet2 *pNewPak;
+	UINT8  nCount, nId;
+	L2IpuToDspHeader oIpuToDspHeader;
+
+#ifdef SINGLE_CORE_OPERATION
+	pNewPak = ITaskQ_Read(&pThis->oTstL1TransmitterQ);
+#else
+	pNewPak = ITaskQ_Read(&pThis->oL1TransmitterQ.oRxQ);
+#endif
+
+//	LOG_printf(&trace,"L1Manager: Data received from IPU " );
+	Log_print0(Diags_USER1,"TRACE: L1Manager: Data received from IPU " );
+	
+
+	// Allocate Packet
+//	pNewPak = pThis->GetCmdPktPtr(pThis);
+
+	// Copy.Since it is safe, not to believe the DDR which is used by Srio.
+//	memcpy(pNewPak, pTempPacket, pTempPacket->Header.nByteCnt + sizeof(pTempPacket->Header));
+
+	pRealL2Pak  = (RealDataTx1  *)pNewPak->nData;
+
+	pRealL2Pak->L2ValidFlag &= 0x0f; // ensuring only four bits are there.
+
+//	pRealL2Pak->L2ValidFlag = 0x0f; //Hard coding.
+
+	for (nCount = 0;(pRealL2Pak->L2ValidFlag);++nCount)
+	{
+		if (pRealL2Pak->L2ValidFlag &  (1 << nCount) )
+		{
+			CHAR *ptr;
+
+			ptr = (CHAR * )&pRealL2Pak->Data1Header;
+			ptr += nCount * (sizeof(RealL2IpuToDspHeader) + RX_TYPE1_DATA_SIZE);
+			DataPkt_GetL2IpuToDspHeader(&oIpuToDspHeader, (RealL2IpuToDspHeader *)ptr);
+			nId = L1Manager_GetTxMgrIdfromHeader(pThis, &oIpuToDspHeader);
+			if (nId < MAX_TX_MGR)
+			{
+
+
+			}
+			else
+			{
+			//	LOG_printf(&fatal,"L1Manager: Invalid request received  " );
+				Log_print0(Diags_USER1,"FATAL : L1Manager: Invalid request received  " );
+			}
+			pRealL2Pak->L2ValidFlag &= ~(1 << nCount);
+		}
+		
+	} 
+
+	
+}
+#endif
+
+// analyze header identify the TxManager Instance comparing the Database..
+#if 0
+UINT8 L1Manager_GetTxMgrIdfromHeader(L1Manager *pThis, L2IpuToDspHeader *pIpuToDspHeader)
+{
+	UINT8  nCount;
+
+	for (nCount = 0; nCount < 4; ++nCount)
+	{
+		if ((pThis->oL2MsgKey[nCount].nArfcn == pIpuToDspHeader->nARFCN))
+	//		&& (pThis->oL2MsgKey[nCount].nTN == pIpuToDspHeader->nTS)
+	//		&& (pThis->oL2MsgKey[nCount].eDir == pIpuToDspHeader->nDirection))
+		{// We got the id.
+			break;
+		}
+
+	}
+
+	return nCount;
+	
+}
+#endif
+
+VOID L1Manager_SetL2MsgKey(L1Manager *pThis, UINT8 nTxmgrid, UINT16 nARFCN, UINT8 nTS, DIRECTION eDir)
+{
+	
+	
+	pThis->oL2MsgKey[nTxmgrid].nArfcn = nARFCN;
+//	pThis->oL2MsgKey[nTxmgrid].nTN = nTS;
+//	pThis->oL2MsgKey[nTxmgrid].eDir = eDir;	
+	
+	
+}
+
+VOID L1Manager_ResetL2MsgKey(L1Manager *pThis, UINT8 nTxmgrid)
+{
+
+	pThis->oL2MsgKey[nTxmgrid].nArfcn = 0;
+//	pThis->oL2MsgKey[nTxmgrid].nTN = 0;
+//	pThis->oL2MsgKey[nTxmgrid].eDir = (DIRECTION)0;
+}
+
+
+VOID L1Manager_OnCommand( L1Manager *pThis)
+{
+
+	Packet *pRxPacket;
+	Int status = 0;
+	IPCMessage *cMesg;
+
+	if(MesgQ_Initialized == TRUE)
+	{
+	   status = MessageQ_get(messageQ[CMD], (MessageQ_Msg *)&cMesg, MessageQ_FOREVER);
+	     if (status < 0) {
+	        System_abort("This should not happen since timeout is forever\n");
+	     }
+	     if(getMsgType(cMesg) != MSGTYPE_PACKET)
+	     {
+	    	 uart_write("Invalid Message!\n");
+	    	 while(1);
+	     }
+
+	     pRxPacket = (Packet *)getSteMsg(cMesg);
+
+	     if(pRxPacket != NULL)
+	     {
+	     L1Manager_DoCommandProcessing(pThis, pRxPacket);
+	     }
+	}
+	else
+	{
+		Task_yield();
+	}
+}
+VOID L1Manager_OnBurstData( L1Manager *pThis)
+{
+	Burst	*pBurst;
+	UINT8	nRxManagerID;
+	UINT8	nFromDDC;
+	Int 	status = 0;
+	IPCMesgBurst *pbrst = NULL;
+
+	if(MesgQ_Initialized == TRUE)
+	{
+		status = MessageQ_get(messageQ[DATA], (MessageQ_Msg *)&pbrst, MessageQ_FOREVER);
+		if (status < 0)
+		{
+			System_abort("This should not happen since timeout is forever\n");
+		}
+
+	     if(pbrst->type !=  MSGTYPE_BURST)
+	     {
+	    	 uart_write("Invalid Message!\n");
+	    	 while(1);
+	     }
+
+	     pBurst = (Burst *)(&pbrst->msg);
+	     nFromDDC = Burst_GetDDCNum(pBurst);
+	     nRxManagerID = pBurst->nRXMgrId;
+	}
+	else
+	{
+		Task_yield();
+		return;
+	}
+
+	if((nFromDDC == 0) && (pBurst->eDir == DL ))
+	{
+		Eth_Debug("DDC num is %d nRxMgrId %d pBurst = 0x%x",nFromDDC,nRxManagerID,pBurst);
+		ASSERT_FATAL();
+	}
+	RxManager_DoBurstDataProcessing(&pThis->oRxManager[nRxManagerID], pBurst );
+}
+
+#pragma DATA_SECTION(Pak,".nocache")
+char Pak[50] = {0};
+
+VOID L1Manager_SendCommand(L1Manager *pThis, UINT8 nChildID, Packet *pPacket)
+{
+	CmdPkt oCmdPkt;
+	CmdPkt_Parse(&oCmdPkt, pPacket);
+	
+	SysTime_Now(&pPacket->oNow);
+	pPacket->nCoreno = pThis->eCore;    // CmdRouter_DeleteChannel() needs the Core No.
+
+	if(pPacket->nCommand == CMDPKT_ETHR_WRITE)
+	{
+		Transmit_Mesg(CORE_0,DATA,pPacket);
+	}
+	else if(pPacket->nCommand == CMDPKT_FPGA_WRITE)
+	{
+#if 0
+		UINT8* pTempPkt;
+		UINT32 Size = 0;
+		pTempPkt = (UINT8 *)&Pak;
+		Size = CmdPkt_GetDataCount(&oCmdPkt) + PACKET_HEADER_SIZE;
+		if(Size % 8 != 0)
+		{
+			memset(pTempPkt,0,4);
+			pTempPkt = pTempPkt+4;
+			memcpy(pTempPkt,pPacket,Size);
+
+			Log_write1(UIABenchmark_start,(xdc_IArg)"Srio_tx");
+			if(Srio_TxPacket((Srio*)gSRIO,(UINT8 *)Pak,(Size+4),0x0,SRIO_IF_0) == FALSE)
+			{
+				Eth_Debug((CHAR *)"SRIO_cmd sending Failed");
+			}
+			CycleDelay(250);
+			Log_write1(UIABenchmark_stop,(xdc_IArg)"Srio_tx");
+		}
+
+		else
+		{
+			memcpy(pTempPkt,pPacket,Size);
+			Log_write1(UIABenchmark_start,(xdc_IArg)"Srio_tx");
+			if(Srio_TxPacket((Srio*)gSRIO,(UINT8 *)pTempPkt,Size,0x0,SRIO_IF_0) == FALSE)
+				Eth_Debug((CHAR *)"SRIO_cmd sending Failed");
+			CycleDelay(250);
+			Log_write1(UIABenchmark_stop,(xdc_IArg)"Srio_tx");
+		}
+		Free(0,pPacket);
+#else
+	Transmit_Mesg(CORE_0,CMD,pPacket);
+#endif
+	}
+	else
+	{
+		ASSERT_FATAL()
+	}
+}
+
+
+
+VOID L1Manager_SendBurstInfo(L1Manager *pThis, BurstInfo *pBurstInfo)
+{
+	INT16		nIndex;
+
+	nSeqNum++;
+	pBurstInfo->nSeqNum = nSeqNum;
+	nIndex = pBurstInfo->nDDCNum - 1;
+
+
+	if((nIndex < 0 ) || (nIndex >=64))
+	{
+		LOG_DUMP( "#### FATAL #### L1Manager: The Index value is wrong %d ,nDDCNum =%d nTN = %d,dir = %d",\
+		nIndex,pBurstInfo->nDDCNum,pBurstInfo->oTime.nTN,pBurstInfo->eDir);
+		ASSERT_FATAL()
+	}
+	if(pBurstInfo->bSendSwitchCmd == TRUE)
+	{
+		//while(1);
+	}
+	Transmit_Mesg(CORE_0,BURSTREQ,pBurstInfo);
+}
+
+
+VOID L1Manager_DoCommandProcessing( L1Manager *pThis, Packet *pRxPacket )
+{
+	CommandType eCommand;
+	UINT8	nRxManager = 255;
+
+
+	CmdPkt	oCmdPkt;
+
+	CmdPkt_Parse(&oCmdPkt, pRxPacket);
+
+	
+	eCommand = CmdPkt_GetCommand(&oCmdPkt);
+
+	switch( eCommand )
+	{
+		case IPU_TO_DSP_SCAN_BEACON_FREQ	:
+		case IPU_TO_DSP_CONFIGURE_RECEIVER	:
+		case IPU_TO_DSP_SET_TSC_FOR_RECEIVER :
+		case IPU_TO_DSP_STOP_RECEIVER :
+		case IPU_TO_DSP_STOP_SCANNING_ARFCN:
+		case DSP_TO_FPGA_RX_TUNE:
+		case IPU_TO_DSP_STOP_SCANING_BAND:
+		case IPU_TO_DSP_CHANNEL_MODIFY:
+	        if( CmdPkt_GetPacketType(&oCmdPkt) == CMD_FROM_SRC )
+			{	
+	//        	LOG_EVENT2( "L1Manager: RxManager[%d] Received Cmd = %d", oCmdPkt.pPacket->nRxMgr, eCommand);
+
+			}
+			else
+			{
+	//			LOG_EVENT( "L1Manager: RxManager[%d] Received Sts = %d", oCmdPkt.pPacket->nRxMgr, eCommand);
+			}
+
+		
+		    nRxManager = oCmdPkt.pPacket->nRxMgr;
+		    RxManager_DoCommandProcessing( &pThis->oRxManager[nRxManager], &oCmdPkt);
+
+				// TODO
+				break;
+	
+
+		default:
+			// SEND ERROR BACK TO SENDER..
+			// COMMAND IS NOT EXPECTED HERE
+		//	LOG_FATAL( "L1Manager: Unknown Command %d", eCommand);
+			LOG_FATAL1( "L1Manager: Unknown Command %d", eCommand);
+			LOG_DUMP( "FATAL: ### L1Manager: Unknown Command %d ###", eCommand);
+			break;
+	
+	}
+
+	
+}
+
+static VOID L1Manager_SendL2Packet(struct L1Manager *pThis, Packet2 *pPacket)
+{
+#ifndef OLD_IIPC
+	//SendL2_MessageQ(pThis,pPacket);
+	UINT8	PktType;
+	UINT8  	nPktSize;
+	CmdPkt			 oDataPkt;
+	Packet2			*pL2Pak;
+	PktType = (UINT8)DataPkt_GetPacketType(pPacket->nData);
+
+	pL2Pak = Alloc(MSGTYPE_PACKET2);
+	pL2Pak->nData[0] = PktType;
+	pL2Pak->nData[1] = 0;
+	pL2Pak->nData[2] = 0x14;
+	pL2Pak->nData[3] = 0x14;
+
+//Copy the Packet
+	DataPkt_CopyRealPacket((L2PacketType)PktType, pL2Pak->nData, pPacket->nData);
+
+	nPktSize = DataPkt_GetRealPktSize(pL2Pak->nData);
+
+// Making header Since packet header is same for command and data
+	CmdPkt_Make(
+		&oDataPkt,
+		(Packet *)pL2Pak,
+		RECEIVER_IPU,
+		nPktSize,
+		DATA_PACKET,
+		DATA_PKT,
+		(nSeqNum | ((pThis->eCore-CORE_1)<<8))
+		);
+//	LOG_DUMP("L2Pak Sent to Core_0");
+	Transmit_Mesg(CORE_0,DATA,pL2Pak);
+	Free(0,pPacket);
+#else
+#ifndef SINGLE_CORE_OPERATION
+	ITaskQ_Write(&pThis->oQ_RxMgr_PktAsmblr, pPacket);
+#else
+//	Free(gHash[SEG_RECEIVER_IPU_DATAPKT_ID], pPacket);
+	ITaskQ_Write(&pThis->oQ_RxMgr_PktAsmblr, pPacket);
+#endif
+#endif // OLD_IIPC
+//	LOG_TRACE( "L1Manager: Sending L2Packet Type[%d]: 0x%x",  pPacket->nData[0], pPacket);	
+}
+
+
+#if 0
+static L1Manager_SendL2Pkt(L1Manager *pThis)
+{
+		Packet *pPacketFromRxMgr;
+		UINT8	PktType;
+		UINT8  	nPktSize;
+		L2PktDetails 	*pPktDetails;
+		CmdPkt			 oDataPkt;
+
+		pPacketFromRxMgr = ITaskQ_Read(&pThis->oQ_RxMgr_PktAsmblr);
+		PktType = (UINT8)DataPkt_GetPacketType(pPacketFromRxMgr->nData);
+		pPktDetails = &pThis->PacketDetails[PktType];
+				
+		pPktDetails->pL2PacketInfo	=	L1Manager_GetL2PacketInfoPtr(pThis->eCore);
+		pPktDetails->pL2PacketInfo->pInfo->nData[0] = PktType;// 0 --> TYPE1 ; 1--> TYPE2; 2--> Type 3
+		pPktDetails->pL2PacketInfo->pInfo->nData[1] = 0;    // packet validity
+		pPktDetails->pL2PacketInfo->pInfo->nData[2] = 0X14; // reserved
+		pPktDetails->pL2PacketInfo->pInfo->nData[3] = 0X14; // reserved
+
+	//Copy the Packet
+		DataPkt_CopyRealPacket((L2PacketType)PktType, pPktDetails->pL2PacketInfo->pInfo->nData, pPacketFromRxMgr->nData);
+
+		nPktSize = DataPkt_GetRealPktSize(pPktDetails->pL2PacketInfo->pInfo->nData);
+
+	// Making header Since packet header is same for command and data 
+		CmdPkt_Make(
+			&oDataPkt,
+			(Packet*)pPktDetails->pL2PacketInfo->pInfo,
+			RECEIVER_IPU,
+			nPktSize,
+			DATA_PACKET,
+			DATA_PKT,
+			(nSeqNum | ((pThis->eCore-CORE_1)<<8))
+			);
+
+		L1Manager_SendL2PacketInfo(pPktDetails->pL2PacketInfo);
+
+#ifdef OLD_IIPC
+		Free(gHash[SEG_RECEIVER_IPU_DATAPKT_ID],pPacketFromRxMgr);
+#else
+		Free(0,pPacketFromRxMgr);
+#endif /* OLD_IIPC */
+}
+#endif
+//#define SIMULATE_L2SEND_PAK
+
+#ifdef SIMULATE_L2SEND_PAK
+
+BOOL	Simulate_flag = FALSE;
+Packet TestPak;
+
+static void L1Simulate_RxMgr_PktAsmblr(struct L1Manager *pThis)
+{
+	char *temp = (char *)&TestPak;
+	UINT16 count;
+	memset(&TestPak, 0x00, sizeof(TestPak));
+
+	for (count = 0; count<sizeof(TestPak);++count)
+	{
+		*temp = count; 
+		++temp;
+	}
+		
+	DataPkt_SetPacketType(&TestPak.nData[0], TRAFFIC_DATA);
+	TestPak.nData[1] = 0x1;
+	ITaskQ_Write(&pThis->oQ_RxMgr_PktAsmblr,&TestPak);
+}
+
+
+#endif
+
+
+#if 0
+VOID L1Manager_AssemblerTask(L1Manager *pThis)
+{
+	SysTime 		 oNow;
+	static SysTime	oPrevTime = {0, 0};
+	static UINT8 nCount = 0;
+			UINT8 nId;
+			oPrevTime = oNow;	
+	UINT8 nTN;
+
+ 	while(1)
+	{
+	
+	#ifdef SINGLE_CORE_OPERATION
+			//Wait for 200 Micro Seconds
+
+		while(1)
+		{
+		UINT8 nId;
+		UINT8 nTN;
+		for ( nId=0;nId<MAX_TX_MGR;++nId)
+			{
+				if (pThis->oTxManager[nId].bON == TRUE)
+				{
+					if (pThis->oTxManager[nId].eMode == TXMODE_CALLBLOCKING)
+					{
+#ifdef Driver_modified // ##### bcz of driver errors, have to modify the code
+						TxManager_DoCallBlocking(&pThis->oTxManager[nId], NULL);
+#endif
+					}
+					if (pThis->oTxManager[nId].eMode == TXMODE_VBTSOPERATION)
+					{
+						
+								for(nTN = 0; nTN <MAX_TIMESLOTS_PER_FREQ; nTN++)
+								{
+#ifdef Driver_modified // ##### bcz of driver errors, have to modify the code
+									TxManager_OnL2Packet(&pThis->oTxManager[nId], NULL, NULL,nTN);
+#endif
+								}
+					
+
+						TxManager_DoVirtualBTS(&pThis->oTxManager[nId], NULL,0);
+					}
+
+				}
+			}
+
+			{
+				static UINT32 nIndex = 0;
+				GSMConfig *pBTS;
+				// Also handling core 0 part of sending the burst..
+				while (pGSharedBurstToFPGAMgr->oPayloadInfo[nIndex].bWrote == TRUE )
+				{
+					if (pGSharedBurstToFPGAMgr->oPayloadInfo[nIndex].pInfo->bFlag & DATA_PAK)
+					{
+
+						pGSharedBurstToFPGAMgr->oPayloadInfo[nIndex].bWrote  = FALSE;
+;
+
+						pBTS = pGSharedBurstToFPGAMgr->oPayloadInfo[nIndex].pInfo->pBTS;
+//pBurstptr->pInfo->oDataPak.oData.DUCBurst.Data
+
+
+						if (pBTS)
+						{
+							HSEM_Lock((Hsem*)gBTSSem);
+							GSMTime oTime;
+							GSMTime_Init(&oTime,pBTS->nCurrentFN, 0);
+							pBTS->nLastSyncFN  = pBTS->nCurrentFN;
+							SysTime_Now(&oNow);
+						//	LOG_printf(&fatal, " The FrameNumber is %d", pBTS->nCurrentFN);
+							memcpy(&pBTS->oLastSyncTime, &pGSharedBurstToFPGAMgr->oPayloadInfo[nIndex].pInfo->oTimeToSendData, sizeof(SysTime));
+
+							GSMTime_Inc(&oTime,1);
+							pBTS->nCurrentFN = GSMTime_FN(&oTime);
+							HSEM_Unlock((Hsem*)gBTSSem);
+						}
+
+							{
+								COMPLEX16 gmsk_burst_out[157];
+								COMPLEX16 baseband[2*157];
+								BIT_TYPE assemble_burst_out[157];
+								FILE *fp,*fp2;
+							
+								static BOOL bFirstTime = FALSE;
+								UINT16 nTotalSymbol = pGSharedBurstToFPGAMgr->oPayloadInfo[nIndex].pInfo->oDataPak.DummyData;
+								UINT16 nSample;
+								
+
+								GSM_DCS_unpack_bits((OCTET*)&pGSharedBurstToFPGAMgr->oPayloadInfo[nIndex].pInfo->oDataPak.oData.DUCBurst.Data[0],
+								&assemble_burst_out[0],  nTotalSymbol);
+								
+								GSM_DCS_map_gmsk_burst(gmsk_burst_out,assemble_burst_out,nTotalSymbol);
+     							generic_pulse_shaper(gmsk_burst_out, baseband,nTotalSymbol, 2);
+								#define INPUTFILE_NAME_TN0_V_VBTS	"..\\..\\..\\tn0_v_vbts.bin"
+								#define INPUTFILE_NAME_TN0_V_VBTS2	"..\\..\\..\\tn0_v_vbts.txt"
+
+							
+								if(bFirstTime == FALSE )
+								{
+									fp = fopen(INPUTFILE_NAME_TN0_V_VBTS,"wb");
+									fp2 = fopen(INPUTFILE_NAME_TN0_V_VBTS2,"w");
+									fclose(fp);fclose(fp2);
+									fp = fopen(INPUTFILE_NAME_TN0_V_VBTS,"wb");
+									fp2 = fopen(INPUTFILE_NAME_TN0_V_VBTS2,"w");
+									bFirstTime = TRUE;
+								}
+
+								{
+
+
+								if( bEnableLogging )
+								{
+								//	for(nSample =0; nSample<nTotalSymbol*2; nSample++)
+								//		fprintf(fp2, "%d\t%d\t%d\n", nSample, baseband[nSample].r, baseband[nSample].i);
+								}
+								}
+								if(bEnableLogging)
+								{
+								fwrite(baseband,sizeof(COMPLEX16),nTotalSymbol*2,fp);
+								}
+				
+								
+							//	fclose(fp);
+							}
+						
+
+						{
+							UINT8 nByte=0;
+
+							if(pBTS)
+							//LOG_EVENT("nCurrentFN: %d", pGSharedBurstToFPGAMgr->oPayloadInfo[nIndex].pInfo->pBTS->nCurrentFN);
+								LOG_EVENT1("nCurrentFN: %d", pGSharedBurstToFPGAMgr->oPayloadInfo[nIndex].pInfo->pBTS->nCurrentFN);
+
+							{
+
+								static SysTime oPrevTime = {0,0};
+								INT64 nDiffUS = SysTime_DeltaUs(&oPrevTime, &pGSharedBurstToFPGAMgr->oPayloadInfo[nIndex].pInfo->oTimeToSendData);
+								oPrevTime = pGSharedBurstToFPGAMgr->oPayloadInfo[nIndex].pInfo->oTimeToSendData;
+								//LOG_EVENT("Burst Diff: %d", nDiffUS);
+								LOG_EVENT1("Burst Diff: %d", nDiffUS);
+
+										
+
+							}
+							
+						//	LOG_EVENT("Burst Tx %d sec %d usec", pGSharedBurstToFPGAMgr->oPayloadInfo[nIndex].pInfo->oTimeToSendData.nSec,pGSharedBurstToFPGAMgr->oPayloadInfo[nIndex].pInfo->oTimeToSendData.nUSec);
+							
+							for(nByte =0;nByte<4;nByte+=4)
+							{
+								UINT64 nData;
+
+
+								nData = pGSharedBurstToFPGAMgr->oPayloadInfo[nIndex].pInfo->oDataPak.oData.DUCBurst.Data[nByte];
+								nData |= pGSharedBurstToFPGAMgr->oPayloadInfo[nIndex].pInfo->oDataPak.oData.DUCBurst.Data[nByte+1]<<8;
+								nData |= pGSharedBurstToFPGAMgr->oPayloadInfo[nIndex].pInfo->oDataPak.oData.DUCBurst.Data[nByte+2]<<16;
+								nData |= pGSharedBurstToFPGAMgr->oPayloadInfo[nIndex].pInfo->oDataPak.oData.DUCBurst.Data[nByte+3]<<24;
+								
+								//LOG_EVENT("Burst bytes: 0x%x", nData);
+								LOG_EVENT1("Burst bytes: 0x%x", nData);
+								//LOG_EVENT("Burst[%d]: 0x%x", nByte, pGSharedBurstToFPGAMgr->oPayloadInfo[nIndex].pInfo->oDataPak.oData.DUCBurst.Data[nByte]);
+							}
+
+						}
+					}
+			
+			
+					nIndex = ( nIndex + 1 ) % MAX_L2PACKETS_TO_IPU;
+					pGSharedBurstToFPGAMgr->nReadIndex = nIndex;
+				}
+
+
+		}
+
+		//TSK_yield();// DSP BIOS API
+	 	Task_yield(); // SYS BIOS API
+		}
+		#endif
+			
+		
+	}
+}
+#endif
+
+
+static	Packet 		*L1Manager_GetCmdPktPtr(struct L1Manager *pThis )
+{
+	Packet *pPacket;
+#ifdef SINGLE_CORE_OPERATION
+
+#ifndef OLD_IIPC
+	pPacket = Alloc( MSGTYPE_PACKET);
+#else
+	pPacket = Alloc( gHash[SEG_RECEIVER_IPU_CMDPKT_ID] );
+#endif /* OLD_IIPC */
+
+#else
+
+#ifndef OLD_IIPC
+	pPacket	=	Alloc_CoreSafe(MSGTYPE_PACKET, &pThis->oL1CommandQ.oLock);
+#else
+	pPacket	=	Alloc_CoreSafe(gHash[pThis->oL1CommandQ.eHashID], &pThis->oL1CommandQ.oLock);
+#endif /* OLD_IIPC */
+
+
+#endif
+	return pPacket;
+}
+static	BurstInfo   *L1Manager_GetBurstInfoPtr(struct L1Manager *pThis)
+{
+	BurstInfo	*pBurstInfo;
+
+#ifdef SINGLE_CORE_OPERATION
+
+#ifndef OLD_IIPC
+		pBurstInfo	=	Alloc( MSGTYPE_BURSTINFO);
+#else
+		pBurstInfo	=	Alloc( gHash[SEG_ICOREQ_BURSTINFO_TO_C0_ID] );
+#endif /* OLD_IIPC */
+
+#else
+
+#ifndef OLD_IIPC
+		pBurstInfo	=	Alloc_CoreSafe(MSGTYPE_BURSTINFO, &pThis->oL1BurstInfoQ.oLock);
+#else
+		pBurstInfo	=	Alloc_CoreSafe(gHash[pThis->oL1BurstInfoQ.eHashID], &pThis->oL1BurstInfoQ.oLock);
+#endif /* OLD_IIPC */
+
+#endif
+		pBurstInfo->bCopySamples = TRUE;
+		return pBurstInfo;
+
+}
+#ifdef OLD_IIPC
+static	L2PacketInfo     *L1Manager_GetL2PacketInfoPtr(DSP_CORE eCore)
+{
+	L2PacketInfo	*pL2PacketInfo;
+
+	// Get memory from L2PacketMgr
+	UINT16	nIndex = gSharedL2PacketMgr[eCore].nWriteIndex;
+	if(nIndex==1)
+	{
+		LOG_TRACE0("Stop here");
+	}
+	if(gSharedL2PacketMgr[eCore].oPayload[nIndex].bWrote == TRUE )
+	{
+	//	LOG_FATAL( "L1Manager: L2 packet is not taken by core0 Index: %d", nIndex);
+		LOG_FATAL1( "L1Manager: L2 packet is not taken by core0 Index: %d", nIndex);
+		LOG_DUMP( " FATAL: ### L1Manager: L2 packet is not taken by core0 Index: %d ###", nIndex);
+		ASSERT_FATAL() // for time being 
+	}	
+	else // wrote == false
+	{
+		pL2PacketInfo =  (L2PacketInfo*)&gSharedL2PacketMgr[eCore].oPayload[nIndex];
+		gSharedL2PacketMgr[eCore].nWriteIndex = ( nIndex + 1 )%MAX_L2PACKETS_TO_IPU;
+		
+	}
+	return pL2PacketInfo;
+
+}
+#endif /* OLD_IIPC */
+
+static	Packet2 	*L1Manager_GetBurstPtr(struct L1Manager *pThis)
+{
+	Packet2	*pPacket;
+#ifdef SINGLE_CORE_OPERATION
+
+#ifndef OLD_IIPC
+		pPacket		=	Alloc(MSGTYPE_PACKET2);
+#else
+		pPacket		=	Alloc(gHash[SEG_ICOREQ_BURST_TO_FPGA_ID]);
+#endif /* OLD_IIPC */
+
+#else
+
+#ifndef OLD_IIPC
+		pPacket	=	Alloc_CoreSafe(MSGTYPE_PACKET2, &pThis->oL1TransmitterQ.oLock);
+#else
+		pPacket	=	Alloc_CoreSafe(gHash[pThis->oL1TransmitterQ.eHashID], &pThis->oL1TransmitterQ.oLock);
+#endif /* OLD_IIPC */
+
+#endif
+
+	return pPacket;
+
+}
+
+static VOID L1Manager_RequestBurstInfo(L1Manager* pThis, RxManager *pRxManager, DIRECTION eDir, UINT8 nTN)
+{
+	BurstInfoReq	*pBurstInfoReq;
+
+#ifdef OLD_IIPC
+	
+	pBurstInfoReq	=	Alloc(gHash[SEG_BURSTINFOREQ_ID]);
+	
+	pBurstInfoReq->nTN	=	nTN;
+	pBurstInfoReq->pRxManager	=	pRxManager;
+	pBurstInfoReq->eDir			=	eDir;
+
+	ITaskQ_Write(&pThis->oBurstInfoReqQ, pBurstInfoReq);
+#else
+	pBurstInfoReq	=	Alloc(MSGTYPE_BURSTINFOREQ);
+
+	pBurstInfoReq->nTN	=	nTN;
+	pBurstInfoReq->pRxManager	=	pRxManager;
+	pBurstInfoReq->eDir			=	eDir;
+
+	Transmit_Mesg(MultiProc_self(),BURSTREQ,pBurstInfoReq);
+#endif /* OLD_IIPC */
+
+		
+}
+
+static VOID L1Manager_OnBurstInfoReq(L1Manager *pThis)
+{
+
+	BurstInfoReq	*pBurstInfoReq;
+	BOOL			bBurstInfoRequested;
+#ifdef OLD_IIPC
+	pBurstInfoReq	=	ITaskQ_Read(&pThis->oBurstInfoReqQ);
+
+		bBurstInfoRequested =  RxManager_RequestBurstInfo((RxManager*)pBurstInfoReq->pRxManager, pBurstInfoReq->eDir, pBurstInfoReq->nTN);
+
+	if(bBurstInfoRequested == TRUE )
+	{
+	//	LOG_DUMP("BurstInfoRequested Passed");
+		Free(gHash[SEG_BURSTINFOREQ_ID], pBurstInfoReq);
+	}
+	else
+	{
+	//	LOG_DUMP("BurstInfoRequested failed");
+		ITaskQ_Write(&pThis->oBurstInfoReqQ, pBurstInfoReq);
+		//TSK_yield(); // to avoid keep this task in loop// DSP BIOS API
+	 	Task_yield(); // SYS BIOS API // to avoid keep this task in loop
+	}
+#else
+	BurstInfoReq	*pBurstInfoReq_recursive = NULL;
+	IPCMessage *pMesg;
+	int status = -1;
+
+	if(MesgQ_Initialized == TRUE)
+	{
+		status = MessageQ_get(messageQ[BURSTREQ], (MessageQ_Msg *)&pMesg, MessageQ_FOREVER);
+		if (status < 0)
+		{
+			System_abort("This should not happen since timeout is forever\n");
+		}
+
+	     if(getMsgType(pMesg) !=  MSGTYPE_BURSTINFOREQ)
+	     {
+	    	 uart_write("Invalid Message!\n");
+	    	 while(1);
+	     }
+
+	     pBurstInfoReq = (BurstInfoReq *)getSteMsg(pMesg);
+
+		bBurstInfoRequested =  RxManager_RequestBurstInfo((RxManager*)pBurstInfoReq->pRxManager, pBurstInfoReq->eDir, pBurstInfoReq->nTN);
+		if (bBurstInfoRequested == TRUE)
+		{
+			Free(0, pBurstInfoReq);
+		}
+		else
+		{
+			pBurstInfoReq_recursive = Alloc(MSGTYPE_BURSTINFOREQ);
+			memcpy(pBurstInfoReq_recursive, pBurstInfoReq,sizeof(BurstInfoReq));
+			Transmit_Mesg(MultiProc_self(),BURSTREQ,pBurstInfoReq_recursive);
+			Free(0, pBurstInfoReq);
+			Task_yield(); // SYS BIOS API // to avoid keep this task in loop
+		}
+
+	}
+	else
+	{
+		Task_yield();
+	}
+
+#endif
+
+}
+static  VOID 	L1Manager_SendL2PacketInfo(L2PacketInfo *pL2PacketInfo)
+{
+	//LOG_DEBUG("L1Mgr: Flag set");
+	LOG_TRACE1("L1MANAGER:pL2PacketInfo->bWrote 0x%x",(&pL2PacketInfo->bWrote));
+	pL2PacketInfo->bWrote = TRUE;
+}
+
+VOID L1Manager_FlushL2Packet(L1Manager *pThis)
+{
+
+	L2PktDetails 	*pPktDetails;
+	UINT8			 PktType;
+
+
+	for(PktType = 0; PktType < DATAIF_MAX_PACKET_TYPE; PktType++)
+	{
+			pPktDetails = &pThis->PacketDetails[PktType];
+
+			if(pPktDetails->bPktCreated == TRUE)
+			{
+				
+#ifndef SINGLE_CORE_OPERATION
+/******** obsolete
+				Free_CoreSafe(GetHashInfoHandler(gHash[pThis->oL1ReceiverQ.eHashID]), 
+							  pPktDetails->pPkt,
+							  &pThis->oL1ReceiverQ.oLock);
+*********/
+		// indicate to core1 manager not to send this packet
+				pPktDetails->pL2PacketInfo->bSkipSend = TRUE;
+				L1Manager_SendL2PacketInfo(pPktDetails->pL2PacketInfo);
+#endif
+				
+				pPktDetails->bPktCreated = FALSE;
+			}
+ 	}
+}
+
+#ifdef OLD_IIPC
+static	BurstToFPGAInfo     *L1Manager_GetBurstToFPGAPtr(VOID)
+{
+	BurstToFPGAInfo		*pBurstToFPGAInfo;
+
+	// Get memory from L2PacketMgr
+	UINT16	nIndex = pGSharedBurstToFPGAMgr->nWriteIndex;
+/*	if(pGSharedBurstToFPGAMgr->oPayloadInfo[nIndex].bWrote == TRUE )
+	{
+		LOG_FATAL( "L1Manager: Burst packet is not taken by core0 Index: %d", nIndex);
+//		ASSERT_FATAL() // for time being 
+	}	
+	else // wrote == false	*/
+	{
+		pBurstToFPGAInfo 					   =   (BurstToFPGAInfo*)&pGSharedBurstToFPGAMgr->oPayloadInfo[nIndex];
+		pGSharedBurstToFPGAMgr->nWriteIndex =   ( nIndex + 1 ) % MAX_BURST_PKTS_TO_FPGA;
+	}
+//	LOG_DEBUG("L1Manager_GetBurstToFPGAPtr WriteIndex: %d", nIndex);
+
+	
+	return pBurstToFPGAInfo;
+
+}
+
+static  VOID 	L1Manager_SendBurstToFPGAPtr(BurstToFPGAInfo *pBurstToFPGAInfo)
+{
+	pBurstToFPGAInfo->bWrote = TRUE;
+}
+
+/*static  VOID 	L1Manager_InitBurstToFPGAInfo(VOID)
+{
+	UINT16	nIndex;
+
+	memset(&oBurstToFPGAMgr,0,sizeof(oBurstToFPGAMgr));
+	for(nIndex = 0; nIndex < MAX_BURST_PKTS_TO_FPGA; nIndex++ )
+	{
+		pGSharedBurstToFPGAMgr->oPayloadInfo[nIndex].pInfo = &gBurstToFPGAMgr->oPayload[nIndex];
+	}
+
+}*/
+
+
+static VOID	L1Manager_DropMonitoringChannel(struct L1Manager *pThis, Packet *pPacket)
+{
+
+	UINT8 nRxMgr, nTxMgr;
+
+	for(nRxMgr = 0; nRxMgr < MAX_RX_MGR; nRxMgr++)
+	{
+		RxManager_DropMonitoringChannel(&pThis->oRxManager[nRxMgr], pPacket);
+	}
+
+	
+
+}
+#endif /* OLD_IIPC */
+
+static  VOID L1Manager_ResetTRX(struct L1Manager *pThis, UINT16 nBeaconARFCN)
+{
+
+	UINT8 nRxMgr;
+
+	for(nRxMgr = 0; nRxMgr < MAX_RX_MGR; nRxMgr++)
+	{
+		RxManager_ResetReceiver(&pThis->oRxManager[nRxMgr],nBeaconARFCN);
+	}
+
+
+}

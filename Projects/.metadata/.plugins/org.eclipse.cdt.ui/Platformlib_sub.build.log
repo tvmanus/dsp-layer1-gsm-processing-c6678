@@ -1,0 +1,46 @@
+
+**** Build of configuration Debug for project Platformlib_sub ****
+
+"D:\\TInew\\ccsv5\\utils\\bin\\gmake" -k all 
+'Building file: D:/WorkLocation/Code_736/Code_736/src/steDrv/platform/src/Intr.c'
+'Invoking: C6000 Compiler'
+"D:/TInew/ccsv5/tools/compiler/c6000_7.4.4/bin/cl6x" -mv6600 --abi=eabi -O2 -g --include_path="D:/TInew/ccsv5/tools/compiler/c6000_7.4.4/include" --include_path="D:/WorkLocation/Code_736/Code_736/src/include" --include_path="D:/TInew/xdctools_3_25_03_72/packages" --include_path="D:/TInew/bios_6_37_02_27/packages" --include_path="D:/WorkLocation/Code_736/Code_736/src/steDrv/platform/include" --include_path="D:/TInew/pdk_C6678_1_1_2_6/packages/ti/platform/evmc6678l/platform_lib/include" --include_path="D:/TInew/pdk_C6678_1_1_2_6/packages" --include_path="D:/TInew/pdk_C6678_1_1_2_6/packages/ti/csl" --gcc --define=_TMS320C6400 --display_error_number --diag_warning=225 --opt_for_speed=3 --preproc_with_compile --preproc_dependency="Intr.pp"  "D:/WorkLocation/Code_736/Code_736/src/steDrv/platform/src/Intr.c"
+'Finished building: D:/WorkLocation/Code_736/Code_736/src/steDrv/platform/src/Intr.c'
+' '
+'Building file: D:/WorkLocation/Code_736/Code_736/src/steDrv/platform/src/IntrDB.c'
+'Invoking: C6000 Compiler'
+"D:/TInew/ccsv5/tools/compiler/c6000_7.4.4/bin/cl6x" -mv6600 --abi=eabi -O2 -g --include_path="D:/TInew/ccsv5/tools/compiler/c6000_7.4.4/include" --include_path="D:/WorkLocation/Code_736/Code_736/src/include" --include_path="D:/TInew/xdctools_3_25_03_72/packages" --include_path="D:/TInew/bios_6_37_02_27/packages" --include_path="D:/WorkLocation/Code_736/Code_736/src/steDrv/platform/include" --include_path="D:/TInew/pdk_C6678_1_1_2_6/packages/ti/platform/evmc6678l/platform_lib/include" --include_path="D:/TInew/pdk_C6678_1_1_2_6/packages" --include_path="D:/TInew/pdk_C6678_1_1_2_6/packages/ti/csl" --gcc --define=_TMS320C6400 --display_error_number --diag_warning=225 --opt_for_speed=3 --preproc_with_compile --preproc_dependency="IntrDB.pp"  "D:/WorkLocation/Code_736/Code_736/src/steDrv/platform/src/IntrDB.c"
+"D:/WorkLocation/Code_736/Code_736/src/steDrv/platform/src/IntrDB.c", line 52: warning #190-D: enumerated type mixed with another type
+"D:/WorkLocation/Code_736/Code_736/src/steDrv/platform/src/IntrDB.c", line 54: warning #190-D: enumerated type mixed with another type
+"D:/WorkLocation/Code_736/Code_736/src/steDrv/platform/src/IntrDB.c", line 55: warning #190-D: enumerated type mixed with another type
+'Finished building: D:/WorkLocation/Code_736/Code_736/src/steDrv/platform/src/IntrDB.c'
+' '
+'Building file: D:/WorkLocation/Code_736/Code_736/src/steDrv/platform/src/Timer.c'
+'Invoking: C6000 Compiler'
+"D:/TInew/ccsv5/tools/compiler/c6000_7.4.4/bin/cl6x" -mv6600 --abi=eabi -O2 -g --include_path="D:/TInew/ccsv5/tools/compiler/c6000_7.4.4/include" --include_path="D:/WorkLocation/Code_736/Code_736/src/include" --include_path="D:/TInew/xdctools_3_25_03_72/packages" --include_path="D:/TInew/bios_6_37_02_27/packages" --include_path="D:/WorkLocation/Code_736/Code_736/src/steDrv/platform/include" --include_path="D:/TInew/pdk_C6678_1_1_2_6/packages/ti/platform/evmc6678l/platform_lib/include" --include_path="D:/TInew/pdk_C6678_1_1_2_6/packages" --include_path="D:/TInew/pdk_C6678_1_1_2_6/packages/ti/csl" --gcc --define=_TMS320C6400 --display_error_number --diag_warning=225 --opt_for_speed=3 --preproc_with_compile --preproc_dependency="Timer.pp"  "D:/WorkLocation/Code_736/Code_736/src/steDrv/platform/src/Timer.c"
+'Finished building: D:/WorkLocation/Code_736/Code_736/src/steDrv/platform/src/Timer.c'
+' '
+'Building file: ../delay.c'
+'Invoking: C6000 Compiler'
+"D:/TInew/ccsv5/tools/compiler/c6000_7.4.4/bin/cl6x" -mv6600 --abi=eabi -O2 -g --include_path="D:/TInew/ccsv5/tools/compiler/c6000_7.4.4/include" --include_path="D:/WorkLocation/Code_736/Code_736/src/include" --include_path="D:/TInew/xdctools_3_25_03_72/packages" --include_path="D:/TInew/bios_6_37_02_27/packages" --include_path="D:/WorkLocation/Code_736/Code_736/src/steDrv/platform/include" --include_path="D:/TInew/pdk_C6678_1_1_2_6/packages/ti/platform/evmc6678l/platform_lib/include" --include_path="D:/TInew/pdk_C6678_1_1_2_6/packages" --include_path="D:/TInew/pdk_C6678_1_1_2_6/packages/ti/csl" --gcc --define=_TMS320C6400 --display_error_number --diag_warning=225 --opt_for_speed=3 --preproc_with_compile --preproc_dependency="delay.pp"  "../delay.c"
+'Finished building: ../delay.c'
+' '
+'Building file: ../srio_write.c'
+'Invoking: C6000 Compiler'
+"D:/TInew/ccsv5/tools/compiler/c6000_7.4.4/bin/cl6x" -mv6600 --abi=eabi -O2 -g --include_path="D:/TInew/ccsv5/tools/compiler/c6000_7.4.4/include" --include_path="D:/WorkLocation/Code_736/Code_736/src/include" --include_path="D:/TInew/xdctools_3_25_03_72/packages" --include_path="D:/TInew/bios_6_37_02_27/packages" --include_path="D:/WorkLocation/Code_736/Code_736/src/steDrv/platform/include" --include_path="D:/TInew/pdk_C6678_1_1_2_6/packages/ti/platform/evmc6678l/platform_lib/include" --include_path="D:/TInew/pdk_C6678_1_1_2_6/packages" --include_path="D:/TInew/pdk_C6678_1_1_2_6/packages/ti/csl" --gcc --define=_TMS320C6400 --display_error_number --diag_warning=225 --opt_for_speed=3 --preproc_with_compile --preproc_dependency="srio_write.pp"  "../srio_write.c"
+'Finished building: ../srio_write.c'
+' '
+'Building file: ../uart_write.c'
+'Invoking: C6000 Compiler'
+"D:/TInew/ccsv5/tools/compiler/c6000_7.4.4/bin/cl6x" -mv6600 --abi=eabi -O2 -g --include_path="D:/TInew/ccsv5/tools/compiler/c6000_7.4.4/include" --include_path="D:/WorkLocation/Code_736/Code_736/src/include" --include_path="D:/TInew/xdctools_3_25_03_72/packages" --include_path="D:/TInew/bios_6_37_02_27/packages" --include_path="D:/WorkLocation/Code_736/Code_736/src/steDrv/platform/include" --include_path="D:/TInew/pdk_C6678_1_1_2_6/packages/ti/platform/evmc6678l/platform_lib/include" --include_path="D:/TInew/pdk_C6678_1_1_2_6/packages" --include_path="D:/TInew/pdk_C6678_1_1_2_6/packages/ti/csl" --gcc --define=_TMS320C6400 --display_error_number --diag_warning=225 --opt_for_speed=3 --preproc_with_compile --preproc_dependency="uart_write.pp"  "../uart_write.c"
+'Finished building: ../uart_write.c'
+' '
+'Building target: Platformlib_sub.lib'
+'Invoking: C6000 Archiver'
+"D:/TInew/ccsv5/tools/compiler/c6000_7.4.4/bin/ar6x" r "Platformlib_sub.lib"  "./uart_write.obj" "./srio_write.obj" "./delay.obj" "./Timer.obj" "./IntrDB.obj" "./Intr.obj" 
+  ==>  new archive 'Platformlib_sub.lib'
+  ==>  building archive 'Platformlib_sub.lib'
+'Finished building target: Platformlib_sub.lib'
+' '
+
+**** Build Finished ****

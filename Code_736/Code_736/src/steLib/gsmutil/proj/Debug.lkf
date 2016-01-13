@@ -1,0 +1,4 @@
+-r
+"F:\Codebase\Code_736\src\steLib\gsmutil\out\GSMUtil.lib"
+"F:\Codebase\Code_736\src\steLib\gsmutil\proj\debug\Burst.obj"
+"F:\Codebase\Code_736\src\steLib\genutil\out\GenUtil.lib"

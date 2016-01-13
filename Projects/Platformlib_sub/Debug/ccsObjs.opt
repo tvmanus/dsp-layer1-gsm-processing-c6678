@@ -1,0 +1,1 @@
+"./uart_write.obj" "./srio_write.obj" "./delay.obj" "./Timer.obj" "./IntrDB.obj" "./Intr.obj" 

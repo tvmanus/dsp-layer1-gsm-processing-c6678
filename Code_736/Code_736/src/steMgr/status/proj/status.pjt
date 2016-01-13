@@ -1,0 +1,29 @@
+; Code Composer Project File, Version 2.0 (do not modify or remove this line)
+
+[Project Settings]
+ProjectDir="D:\Bala\WIP\archieve\repository\T_PM_DSP_0680+HM\Code\src\steMgr\status\proj\"
+ProjectType=Library
+CPUFamily=TMS320C64XX
+Tool="Archiver"
+Tool="Compiler"
+Tool="CustomBuilder"
+Tool="DspBiosBuilder"
+Config="Debug"
+Config="Release"
+
+[Source Files]
+Source="..\src\RxCalib.c"
+Source="..\src\statmgr.c"
+
+["Archiver" Settings: "Debug"]
+Options=-r -o"..\out\status.lib"
+
+["Archiver" Settings: "Release"]
+Options=-r -o".\Release\status.lib"
+
+["Compiler" Settings: "Debug"]
+Options=-g -pdsw225 -o3 -fr"$(Proj_dir)\Debug" -i"..\..\commandif\include" -i"..\..\..\include" -i"..\..\..\stedrv\platform\include" -i"..\..\..\stedrv\include" -i"..\..\..\stelib\genutil\include" -i"..\..\..\stelib\commandif\include" -i"..\..\arfcn\include" -i"..\..\..\3rdparty\gsml1\include" -i"..\..\..\stelib\gsmutil\include" -i"..\..\include" -i"..\..\dataif\include" -i"..\..\diagif\include" -i"..\include" -d"_DEBUG" -mf5 -mv6400 --gcc
+
+["Compiler" Settings: "Release"]
+Options=-pdsw225 -o3 -fr"$(Proj_dir)\Release" -mv6400
+

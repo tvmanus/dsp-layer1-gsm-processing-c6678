@@ -1,0 +1,54 @@
+; Code Composer Project File, Version 2.0 (do not modify or remove this line)
+
+[Project Settings]
+ProjectDir="D:\Bala\WIP\Codebase_650\Code\src\steDrv\BootDrv\proj\"
+ProjectType=Library
+CPUFamily=TMS320C64XX
+Tool="Archiver"
+Tool="Compiler"
+Tool="CustomBuilder"
+Tool="DspBiosBuilder"
+Config="Debug"
+Config="Release"
+
+[Source Files]
+Source="..\include\Gpo.h"
+Source="..\include\Mcbsp.h"
+Source="..\include\Timer.h"
+Source="..\src\Gpio.c"
+Source="..\src\Gpo.c"
+Source="..\src\Intr.c"
+Source="..\src\IntrDB.c"
+Source="..\src\Mcbsp.c"
+Source="..\src\Timer.c"
+
+["Archiver" Settings: "Debug"]
+Options=-r -o"..\Out\bootdrv.lib"
+
+["Archiver" Settings: "Release"]
+Options=-r -o".\Release\Platformlib.lib"
+
+["Compiler" Settings: "Debug"]
+Options=-pdsw225 -o3 -fr"$(Proj_dir)\Debug" -i"..\include" -i"..\..\include" -i"..\..\..\include" -d"_DEBUG" -d"CHIP_C6474" -ms3 -mv6400+
+
+["Compiler" Settings: "Release"]
+Options=-pdsw225 -o3 -fr"$(Proj_dir)\Release" -mv6400
+
+["..\include\Gpo.h" Settings: "Debug"]
+ExcludeFromBuild=true
+
+["..\include\Gpo.h" Settings: "Release"]
+ExcludeFromBuild=true
+
+["..\include\Mcbsp.h" Settings: "Debug"]
+ExcludeFromBuild=true
+
+["..\include\Mcbsp.h" Settings: "Release"]
+ExcludeFromBuild=true
+
+["..\include\Timer.h" Settings: "Debug"]
+ExcludeFromBuild=true
+
+["..\include\Timer.h" Settings: "Release"]
+ExcludeFromBuild=true
+

@@ -1,0 +1,33 @@
+
+**** Build of configuration Debug for project gsmL1 ****
+
+"D:\\TInew\\ccsv5\\utils\\bin\\gmake" -k all 
+'Building file: D:/WorkLocation/Code_736/Code_736/src/3rdparty/gsmL1/src/beagle_setup.c'
+'Invoking: C6000 Compiler'
+"D:/TInew/ccsv5/tools/compiler/c6000_7.4.4/bin/cl6x" -mv6600 --abi=eabi -O2 -g --include_path="D:/TInew/ccsv5/tools/compiler/c6000_7.4.4/include" --include_path="D:/WorkLocation/Code_736/Code_736/src/include" --include_path="D:/WorkLocation/Code_736/Code_736/src/3rdparty/gsmL1/include" --include_path="D:/WorkLocation/Code_736/Code_736/src/stemgr/diagif/include" --define=_DEBUG --define=_TMS320C6400 --display_error_number --diag_warning=225 --opt_for_speed=3 --preproc_with_compile --preproc_dependency="beagle_setup.pp"  "D:/WorkLocation/Code_736/Code_736/src/3rdparty/gsmL1/src/beagle_setup.c"
+'Finished building: D:/WorkLocation/Code_736/Code_736/src/3rdparty/gsmL1/src/beagle_setup.c'
+' '
+'Building file: D:/WorkLocation/Code_736/Code_736/src/3rdparty/gsmL1/src/bits_pack_unpack.c'
+'Invoking: C6000 Compiler'
+"D:/TInew/ccsv5/tools/compiler/c6000_7.4.4/bin/cl6x" -mv6600 --abi=eabi -O2 -g --include_path="D:/TInew/ccsv5/tools/compiler/c6000_7.4.4/include" --include_path="D:/WorkLocation/Code_736/Code_736/src/include" --include_path="D:/WorkLocation/Code_736/Code_736/src/3rdparty/gsmL1/include" --include_path="D:/WorkLocation/Code_736/Code_736/src/stemgr/diagif/include" --define=_DEBUG --define=_TMS320C6400 --display_error_number --diag_warning=225 --opt_for_speed=3 --preproc_with_compile --preproc_dependency="bits_pack_unpack.pp"  "D:/WorkLocation/Code_736/Code_736/src/3rdparty/gsmL1/src/bits_pack_unpack.c"
+'Finished building: D:/WorkLocation/Code_736/Code_736/src/3rdparty/gsmL1/src/bits_pack_unpack.c'
+' '
+'Building file: D:/WorkLocation/Code_736/Code_736/src/3rdparty/gsmL1/src/egprs_edge_sim_laurent_data.c'
+'Invoking: C6000 Compiler'
+"D:/TInew/ccsv5/tools/compiler/c6000_7.4.4/bin/cl6x" -mv6600 --abi=eabi -O2 -g --include_path="D:/TInew/ccsv5/tools/compiler/c6000_7.4.4/include" --include_path="D:/WorkLocation/Code_736/Code_736/src/include" --include_path="D:/WorkLocation/Code_736/Code_736/src/3rdparty/gsmL1/include" --include_path="D:/WorkLocation/Code_736/Code_736/src/stemgr/diagif/include" --define=_DEBUG --define=_TMS320C6400 --display_error_number --diag_warning=225 --opt_for_speed=3 --preproc_with_compile --preproc_dependency="egprs_edge_sim_laurent_data.pp"  "D:/WorkLocation/Code_736/Code_736/src/3rdparty/gsmL1/src/egprs_edge_sim_laurent_data.c"
+'Finished building: D:/WorkLocation/Code_736/Code_736/src/3rdparty/gsmL1/src/egprs_edge_sim_laurent_data.c'
+' '
+'Building file: D:/WorkLocation/Code_736/Code_736/src/3rdparty/gsmL1/src/generic_pulse_shaper.c'
+'Invoking: C6000 Compiler'
+"D:/TInew/ccsv5/tools/compiler/c6000_7.4.4/bin/cl6x" -mv6600 --abi=eabi -O2 -g --include_path="D:/TInew/ccsv5/tools/compiler/c6000_7.4.4/include" --include_path="D:/WorkLocation/Code_736/Code_736/src/include" --include_path="D:/WorkLocation/Code_736/Code_736/src/3rdparty/gsmL1/include" --include_path="D:/WorkLocation/Code_736/Code_736/src/stemgr/diagif/include" --define=_DEBUG --define=_TMS320C6400 --display_error_number --diag_warning=225 --opt_for_speed=3 --preproc_with_compile --preproc_dependency="generic_pulse_shaper.pp"  "D:/WorkLocation/Code_736/Code_736/src/3rdparty/gsmL1/src/generic_pulse_shaper.c"
+'Finished building: D:/WorkLocation/Code_736/Code_736/src/3rdparty/gsmL1/src/generic_pulse_shaper.c'
+' '
+'Building target: D:\WorkLocation\Code_736\Code_736\src\3rdparty\gsmL1/Out/GSML1.lib'
+'Invoking: C6000 Archiver'
+"D:/TInew/ccsv5/tools/compiler/c6000_7.4.4/bin/ar6x" r "D:\WorkLocation\Code_736\Code_736\src\3rdparty\gsmL1/Out/GSML1.lib"  "./generic_pulse_shaper.obj" "./egprs_edge_sim_laurent_data.obj" "./bits_pack_unpack.obj" "./beagle_setup.obj" 
+  ==>  new archive 'D:\WorkLocation\Code_736\Code_736\src\3rdparty\gsmL1/Out/GSML1.lib'
+  ==>  building archive 'D:\WorkLocation\Code_736\Code_736\src\3rdparty\gsmL1/Out/GSML1.lib'
+'Finished building target: D:\WorkLocation\Code_736\Code_736\src\3rdparty\gsmL1/Out/GSML1.lib'
+' '
+
+**** Build Finished ****

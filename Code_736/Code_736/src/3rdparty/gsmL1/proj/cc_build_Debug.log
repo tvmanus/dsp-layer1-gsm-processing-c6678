@@ -1,0 +1,16 @@
+-----------------------------  gsmL1.pjt - Debug  -----------------------------
+"C:\CCStudio_v3.3\C6000\cgtools\bin\cl6x" -g -pm -pdsw225 -o3 -fr"F:/Codebase/Code_736/src/3rdparty/gsmL1/proj/Debug" -i"../include/" -i"../../../include/" -i"../../../stemgr/diagif/include" -d"_DEBUG" -mt -mh32 -ms0 -mf5 -mv6400+ --mem_model:data=far --gcc -@"../proj/Debug.lkf"
+[beagle_setup.c]
+[bits_pack_unpack.c]
+[egprs_edge_sim_laurent_data.c]
+[generic_pulse_shaper.c]
+<Optimizing>
+<Generating>
+<Assembling>
+
+[Archiving...] "C:\CCStudio_v3.3\C6000\cgtools\bin\ar6x" @"Debug.lkf"
+  ==>  new archive 'F:\Codebase\Code_736\src\3rdparty\gsmL1\Out\GSML1.lib'
+  ==>  building archive 'F:\Codebase\Code_736\src\3rdparty\gsmL1\Out\GSML1.lib'
+
+Build Complete,
+  0 Errors, 0 Warnings, 0 Remarks.

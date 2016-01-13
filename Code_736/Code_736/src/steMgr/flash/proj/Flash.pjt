@@ -1,0 +1,28 @@
+; Code Composer Project File, Version 2.0 (do not modify or remove this line)
+
+[Project Settings]
+ProjectDir="C:\Documents and Settings\balaganapathy.p\My Documents\WIP\WIP_Bootloader_22Oct2010\src\steMgr\flash\proj\"
+ProjectType=Library
+CPUFamily=TMS320C64XX
+Tool="Archiver"
+Tool="Compiler"
+Tool="CustomBuilder"
+Tool="DspBiosBuilder"
+Config="Debug"
+Config="Release"
+
+[Source Files]
+Source="..\src\SpiFlash.c"
+
+["Archiver" Settings: "Debug"]
+Options=-r -o"..\out\Flash.lib"
+
+["Archiver" Settings: "Release"]
+Options=-r -o".\Release\Flash.lib"
+
+["Compiler" Settings: "Debug"]
+Options=-pdsw225 -o3 -fr"$(Proj_dir)\Debug" -i"..\include" -i"..\..\..\stedrv\include" -i"..\..\..\stedrv\bootdrv\include" -i"..\..\..\include" -d"_DEBUG" -ms3 -mv6400+
+
+["Compiler" Settings: "Release"]
+Options=-pdsw225 -o3 -fr"$(Proj_dir)\Release" -mv6400
+

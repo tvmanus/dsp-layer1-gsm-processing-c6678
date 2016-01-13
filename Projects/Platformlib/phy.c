@@ -1,0 +1,130 @@
+/*
+ * phy.c
+ *
+ *  Created on: Jul 21, 2014
+ *      Author: nachiappanr
+ */
+#include <xdc/std.h>
+#include "csl_mdio.h"
+#include "csl_mdioAux.h"
+#include "UsrConfig.h"
+#include "Gpo.h"
+#include "cpsw_singlecore.h"
+
+#define MAX_PHY_RETRY 5
+
+uint8_t phyretry = 0;
+void mdio_write(uint8_t phy_addr);
+
+#pragma CODE_SECTION(mdio_write,".nocache")
+void mdio_write(uint8_t phy_addr)
+{
+#if 1
+
+// Enable Auto Negotiation
+    hMdioRegs->USER_GROUP [0].USER_ACCESS_REG   =   CSL_FMK (MDIO_USER_ACCESS_REG_PHYADR, phy_addr) |
+	                                                CSL_FMK (MDIO_USER_ACCESS_REG_REGADR,4) 		|
+	                                                CSL_FMK (MDIO_USER_ACCESS_REG_WRITE, 1) 		|
+	                                                CSL_FMK (MDIO_USER_ACCESS_REG_GO, 1u)			| 0x0001;
+	// Wait for MDIO state machine finishing
+	while (CSL_MDIO_isUserAccessPending (0));
+
+// Set the Speed as 1GHz.
+    hMdioRegs->USER_GROUP [0].USER_ACCESS_REG   =   CSL_FMK (MDIO_USER_ACCESS_REG_PHYADR, phy_addr) |
+	                                                CSL_FMK (MDIO_USER_ACCESS_REG_REGADR,9) 		|
+	                                                CSL_FMK (MDIO_USER_ACCESS_REG_WRITE, 1) 		|
+	                                                CSL_FMK (MDIO_USER_ACCESS_REG_GO, 1u)			| 0x0600;
+
+	while (CSL_MDIO_isUserAccessPending (0));
+
+// Enable MDIO Cross Over.
+	hMdioRegs->USER_GROUP [0].USER_ACCESS_REG   =   CSL_FMK (MDIO_USER_ACCESS_REG_PHYADR, phy_addr) |
+		                                            CSL_FMK (MDIO_USER_ACCESS_REG_REGADR,16) 		|
+		                                            CSL_FMK (MDIO_USER_ACCESS_REG_WRITE, 1) 		|
+		                                            CSL_FMK (MDIO_USER_ACCESS_REG_GO, 1u)			| 0x0068;
+
+	while (CSL_MDIO_isUserAccessPending (0));
+
+// Control Register.(AutoNeg+FullDuplex+1000MbPS)
+	hMdioRegs->USER_GROUP [0].USER_ACCESS_REG   =   CSL_FMK (MDIO_USER_ACCESS_REG_PHYADR, phy_addr) |
+		                                            CSL_FMK (MDIO_USER_ACCESS_REG_REGADR,0) 		|
+		                                            CSL_FMK (MDIO_USER_ACCESS_REG_WRITE, 1) 		|
+		                                            CSL_FMK (MDIO_USER_ACCESS_REG_GO, 1u)			| 0x1140;//0x1140;
+
+	while (CSL_MDIO_isUserAccessPending (0));
+
+// Reset
+	hMdioRegs->USER_GROUP [0].USER_ACCESS_REG   =   CSL_FMK (MDIO_USER_ACCESS_REG_PHYADR, phy_addr) |
+		                                            CSL_FMK (MDIO_USER_ACCESS_REG_REGADR,0) 		|
+		                                            CSL_FMK (MDIO_USER_ACCESS_REG_WRITE, 1) 		|
+		                                            CSL_FMK (MDIO_USER_ACCESS_REG_GO, 1u)			| 0x9140; //0x9140;
+
+	while (CSL_MDIO_isUserAccessPending (0));
+
+
+	delay_msec(100);
+
+
+#endif
+}
+
+#if 1
+#pragma CODE_SECTION(phy_read_write,".nocache")
+void phy_read_write(uint32_t port_num)
+{
+    uint8_t reg=0;
+    CSL_MDIO_USERACCESS    user_access_reg;
+
+	uart_write("platform_get_phy_link_status (portnum = %d) called \n", port_num);
+
+	//Enable MDIO Control
+	hMdioRegs->CONTROL_REG= 0x410000ff;
+
+/* ***** Read registers ********** */
+    for(reg=0;reg<32;reg++)
+    {
+          user_access_reg.phyAddr = port_num;       // Setup phy and MDIO register address
+          user_access_reg.regAddr = reg;
+
+          // Do a read access to the phy's MDIO register
+          hMdioRegs->USER_GROUP [0].USER_ACCESS_REG   =   CSL_FMK (MDIO_USER_ACCESS_REG_PHYADR, user_access_reg.phyAddr) |
+                                                          CSL_FMK (MDIO_USER_ACCESS_REG_REGADR, user_access_reg.regAddr) |
+                                                          CSL_FMK (MDIO_USER_ACCESS_REG_WRITE, 0) |
+                                                          CSL_FMK (MDIO_USER_ACCESS_REG_GO, 1u);
+
+
+          // Wait for MDIO state machine finishing
+          while (CSL_MDIO_isUserAccessPending (0));
+
+          // Read result from USERACCESS register
+          CSL_MDIO_getUserAccessRegister (0, &user_access_reg);
+
+          uart_write("PHY register %d is 0x%04x\n",reg, user_access_reg.data);
+    }
+   // Disable MDIO Control
+	hMdioRegs->CONTROL_REG &= 0xBFFFFFFFF;
+}
+#endif
+
+#pragma CODE_SECTION(Check_for_phy_status,".nocache")
+void Check_for_phy_status(Ethernet *pThis)
+{
+
+	//Enable MDIO Control
+	hMdioRegs->CONTROL_REG= 0x410000ff;
+
+    delay_msec(5000);
+
+	uart_write("Alive : 0x%x Link up: 0x%x\n",hMdioRegs->ALIVE_REG, hMdioRegs->LINK_REG);
+
+	mdio_write(0);
+	mdio_write(1);
+
+	delay_msec(10000);
+
+	uart_write("Alive : 0x%x Link up: 0x%x\n",hMdioRegs->ALIVE_REG, hMdioRegs->LINK_REG);
+
+	// Disable MDIO Control
+	hMdioRegs->CONTROL_REG &= 0xBFFFFFFFF;
+
+}

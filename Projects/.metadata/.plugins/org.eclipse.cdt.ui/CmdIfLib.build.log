@@ -1,0 +1,23 @@
+
+**** Build of configuration Debug for project CmdIfLib ****
+
+"D:\\TInew\\ccsv5\\utils\\bin\\gmake" -k -j 4 all 
+'Building file: D:/WorkLocation/Code_736/Code_736/src/steLib/commandIf/src/CmdPkt.c'
+'Building file: D:/WorkLocation/Code_736/Code_736/src/steLib/commandIf/src/DataPkt.c'
+'Invoking: C6000 Compiler'
+"D:/TInew/ccsv5/tools/compiler/c6000_7.4.4/bin/cl6x" -mv6600 --abi=eabi -O2 -g --include_path="D:/TInew/ipc_3_21_00_07/packages" --include_path="D:/WorkLocation/Code_736/Code_736/src/include" --include_path="D:/TInew/xdctools_3_25_03_72/packages" --include_path="D:/TInew/ccsv5/tools/compiler/c6000_7.4.4/include" --include_path="D:/WorkLocation/Code_736/Code_736/src/steLib/commandIf/include" --include_path="D:/WorkLocation/Code_736/Code_736/src/stemgr/diagif/include" --include_path="D:/WorkLocation/Code_736/Code_736/src/steLib/genutil/include" --include_path="D:/WorkLocation/Code_736/Code_736/src/steDrv/platform/include" --include_path="D:/TInew/pdk_C6678_1_1_2_6/packages" --include_path="D:/TInew/bios_6_37_02_27/packages" --gcc --define=_DEBUG --define=_TMS320C6400 --display_error_number --diag_warning=225 --opt_for_speed=3 --preproc_with_compile --preproc_dependency="DataPkt.pp"  "D:/WorkLocation/Code_736/Code_736/src/steLib/commandIf/src/DataPkt.c"
+'Invoking: C6000 Compiler'
+"D:/TInew/ccsv5/tools/compiler/c6000_7.4.4/bin/cl6x" -mv6600 --abi=eabi -O2 -g --include_path="D:/TInew/ipc_3_21_00_07/packages" --include_path="D:/WorkLocation/Code_736/Code_736/src/include" --include_path="D:/TInew/xdctools_3_25_03_72/packages" --include_path="D:/TInew/ccsv5/tools/compiler/c6000_7.4.4/include" --include_path="D:/WorkLocation/Code_736/Code_736/src/steLib/commandIf/include" --include_path="D:/WorkLocation/Code_736/Code_736/src/stemgr/diagif/include" --include_path="D:/WorkLocation/Code_736/Code_736/src/steLib/genutil/include" --include_path="D:/WorkLocation/Code_736/Code_736/src/steDrv/platform/include" --include_path="D:/TInew/pdk_C6678_1_1_2_6/packages" --include_path="D:/TInew/bios_6_37_02_27/packages" --gcc --define=_DEBUG --define=_TMS320C6400 --display_error_number --diag_warning=225 --opt_for_speed=3 --preproc_with_compile --preproc_dependency="CmdPkt.pp"  "D:/WorkLocation/Code_736/Code_736/src/steLib/commandIf/src/CmdPkt.c"
+'Finished building: D:/WorkLocation/Code_736/Code_736/src/steLib/commandIf/src/CmdPkt.c'
+' '
+'Finished building: D:/WorkLocation/Code_736/Code_736/src/steLib/commandIf/src/DataPkt.c'
+' '
+'Building target: D:/WorkLocation/Code_736/Code_736/src/steLib/commandIf/Out/CmdIfLib.lib'
+'Invoking: C6000 Archiver'
+"D:/TInew/ccsv5/tools/compiler/c6000_7.4.4/bin/ar6x" r "D:/WorkLocation/Code_736/Code_736/src/steLib/commandIf/Out/CmdIfLib.lib"  "./DataPkt.obj" "./CmdPkt.obj" 
+  ==>  new archive 'D:/WorkLocation/Code_736/Code_736/src/steLib/commandIf/Out/CmdIfLib.lib'
+  ==>  building archive 'D:/WorkLocation/Code_736/Code_736/src/steLib/commandIf/Out/CmdIfLib.lib'
+'Finished building target: D:/WorkLocation/Code_736/Code_736/src/steLib/commandIf/Out/CmdIfLib.lib'
+' '
+
+**** Build Finished ****

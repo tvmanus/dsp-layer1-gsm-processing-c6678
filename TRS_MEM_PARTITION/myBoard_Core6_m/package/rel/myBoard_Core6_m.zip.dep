@@ -1,0 +1,34 @@
+myBoard_Core6_m.zip: Platform.xdc
+Platform.xdc:
+myBoard_Core6_m.zip: Platform.xs
+Platform.xs:
+myBoard_Core6_m.zip: config.bld
+config.bld:
+myBoard_Core6_m.zip: package/.vers_b160
+package/.vers_b160:
+myBoard_Core6_m.zip: package/.vers_g180
+package/.vers_g180:
+myBoard_Core6_m.zip: package/.vers_r170
+package/.vers_r170:
+myBoard_Core6_m.zip: package/.xdc-z63
+package/.xdc-z63:
+myBoard_Core6_m.zip: package/build.cfg
+package/build.cfg:
+myBoard_Core6_m.zip: package/myBoard_Core6_m.ccs
+package/myBoard_Core6_m.ccs:
+myBoard_Core6_m.zip: package/myBoard_Core6_m.class
+package/myBoard_Core6_m.class:
+myBoard_Core6_m.zip: package/myBoard_Core6_m.java
+package/myBoard_Core6_m.java:
+myBoard_Core6_m.zip: package/myBoard_Core6_m.sch
+package/myBoard_Core6_m.sch:
+myBoard_Core6_m.zip: package/package.bld.xml
+package/package.bld.xml:
+myBoard_Core6_m.zip: package/package.defs.h
+package/package.defs.h:
+myBoard_Core6_m.zip: package/package_myBoard_Core6_m.c
+package/package_myBoard_Core6_m.c:
+myBoard_Core6_m.zip: package.bld
+package.bld:
+myBoard_Core6_m.zip: package.xdc
+package.xdc:

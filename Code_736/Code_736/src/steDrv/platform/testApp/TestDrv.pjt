@@ -1,0 +1,62 @@
+; Code Composer Project File, Version 2.0 (do not modify or remove this line)
+
+[Project Settings]
+ProjectDir="F:\Vijay\WIP\src\steDrv\platform\testApp\"
+ProjectType=Executable
+CPUFamily=TMS320C64XX
+Tool="Compiler"
+Tool="CustomBuilder"
+Tool="DspBiosBuilder"
+Tool="Linker"
+Config="Debug"
+Config="Release"
+
+[Project Dependencies]
+Source="..\proj\Platformlib.pjt"
+
+["..\proj\Platformlib.pjt" Settings]
+MatchConfigName=true
+
+[Source Files]
+Source="..\..\..\steLib\genutil\out\GenUtil.lib"
+Source="main.tcf"
+Source="tstmain.c"
+Source="tstSrio.c"
+Source="appC0cfg.cmd"
+Source="appcfg.cmd"
+Source="maincfg.cmd"
+
+[Generated Files]
+Source="maincfg.s62"
+Source="maincfg_c.c"
+
+["Compiler" Settings: "Debug"]
+Options=-g -k -pdsw225 -al -fr"$(Proj_dir)\Debug" -i"..\include" -i"..\..\include" -i"..\..\..\include" -i"../../../SteLib/genutil/include" -d"_DEBUG" -d"CHIP_C6474" -mo -mv6400+
+
+["Compiler" Settings: "Release"]
+Options=-pdsw225 -o3 -fr"$(Proj_dir)\Release" -mv6400
+
+["Linker" Settings: "Debug"]
+Options=-c -m".\Debug\TestDrv.map" -o".\Debug\TestDrv.out" -w -x -i"..\..\..\3rdparty\TI\src" -i"..\out" -l"csl.lib" -l"csl_c64xplus_intc.lib" -l"platformlib.lib" -l"DirectIO_Debug_C6474.lib"
+
+["Linker" Settings: "Release"]
+Options=-c -m".\Release\TestDrv.map" -o".\Release\TestDrv.out" -w -x
+
+["appC0cfg.cmd" Settings: "Debug"]
+LinkOrder=1
+
+["appC0cfg.cmd" Settings: "Release"]
+LinkOrder=1
+
+["appcfg.cmd" Settings: "Debug"]
+LinkOrder=1
+
+["appcfg.cmd" Settings: "Release"]
+LinkOrder=1
+
+["maincfg.cmd" Settings: "Debug"]
+LinkOrder=1
+
+["maincfg.cmd" Settings: "Release"]
+LinkOrder=1
+

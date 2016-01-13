@@ -1,0 +1,17 @@
+myBoard_Core3m/Platform.xdc
+myBoard_Core3m/Platform.xs
+myBoard_Core3m/config.bld
+myBoard_Core3m/package/.vers_b160
+myBoard_Core3m/package/.vers_g180
+myBoard_Core3m/package/.vers_r170
+myBoard_Core3m/package/.xdc-z63
+myBoard_Core3m/package/build.cfg
+myBoard_Core3m/package/myBoard_Core3m.ccs
+myBoard_Core3m/package/myBoard_Core3m.class
+myBoard_Core3m/package/myBoard_Core3m.java
+myBoard_Core3m/package/myBoard_Core3m.sch
+myBoard_Core3m/package/package.bld.xml
+myBoard_Core3m/package/package.defs.h
+myBoard_Core3m/package/package_myBoard_Core3m.c
+myBoard_Core3m/package.bld
+myBoard_Core3m/package.xdc

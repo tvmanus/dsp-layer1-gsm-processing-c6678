@@ -1,0 +1,17 @@
+myBoard_Core5_m/Platform.xdc
+myBoard_Core5_m/Platform.xs
+myBoard_Core5_m/config.bld
+myBoard_Core5_m/package/.vers_b160
+myBoard_Core5_m/package/.vers_g180
+myBoard_Core5_m/package/.vers_r170
+myBoard_Core5_m/package/.xdc-z63
+myBoard_Core5_m/package/build.cfg
+myBoard_Core5_m/package/myBoard_Core5_m.ccs
+myBoard_Core5_m/package/myBoard_Core5_m.class
+myBoard_Core5_m/package/myBoard_Core5_m.java
+myBoard_Core5_m/package/myBoard_Core5_m.sch
+myBoard_Core5_m/package/package.bld.xml
+myBoard_Core5_m/package/package.defs.h
+myBoard_Core5_m/package/package_myBoard_Core5_m.c
+myBoard_Core5_m/package.bld
+myBoard_Core5_m/package.xdc

@@ -1,0 +1,6 @@
+# GENERATED FILE -- DO NOT EDIT!
+# This file contains tconf options for file "main.tcf",
+# for use by the Gconf graphical configuration tool.
+# The options are exported from the following CCS project: 
+# F:\Codebase\Code_736\src\steApp\proj\appC2.pjt, "Debug" configuration.
+-Dconfig.importPath=".;../;%BIOS_INSTALL_DIR%/packages/ti/bios/examples/common;"

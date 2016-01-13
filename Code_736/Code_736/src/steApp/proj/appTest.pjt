@@ -1,0 +1,68 @@
+; Code Composer Project File, Version 2.0 (do not modify or remove this line)
+
+[Project Settings]
+ProjectDir="S:\470_dsp\src\steApp\proj\"
+ProjectType=Executable
+CPUFamily=TMS320C64XX
+Tool="Compiler"
+Tool="CustomBuilder"
+Tool="DspBiosBuilder"
+Tool="Linker"
+Config="Debug"
+Config="Release"
+
+[Source Files]
+Source="..\..\3rdparty\gsmL1\src\delcom_gsm_L1_modules.lib"
+Source="..\..\3rdparty\TI\src\csl.lib"
+Source="..\..\3rdparty\TI\src\csl_c64xplus_intc.lib"
+Source="..\..\steLib\gsmutil\src\GSMTime.c"
+Source="..\..\steLib\gsmutil\testApp\test_GSMTime.c"
+Source="..\src\main.tcf"
+Source="..\testApp\testMain.c"
+Source="..\src\maincfg.cmd"
+Source="appC1cfg.cmd"
+Source="appcfg.cmd"
+
+[Generated Files]
+Source="..\src\maincfg.s62"
+Source="..\src\maincfg_c.c"
+
+["Compiler" Settings: "Debug"]
+Options=-g -pdr -fr"$(Proj_dir)\Debug" -i"$(Proj_dir)" -i"../../steLib/gsmutil/include" -i"../../steDrv/include" -i"..\..\..\include" -i"..\include\" -i"..\..\include" -i"..\..\..\steLib\gsmutil\include" -i"..\..\steLib\gsmutil\include" -i"..\..\..\steLib\genutil\include" -i"..\..\steLib\genutil\include" -i"..\..\steMgr\arfcn\include" -i"..\..\..\steMgr\arfcn\include" -i"..\..\..\3rdparty\gsmL1\include" -i"..\..\3rdparty\gsmL1\include" -i"..\..\..\steLib\commandIf\include" -i"..\..\steLib\commandIf\include" -i"..\..\..\steDrv\include " -i"..\..\stedrv\platform\include\" -i"..\..\..\steMgr\dataif\include" -i"..\..\steMgr\dataif\include" -i"..\..\..\stedrv\include\" -i"..\..\..\steMgr\Commandif\include" -i"..\..\steMgr\include" -i"..\..\steMgr\Commandif\include" -mv6400+
+
+["Compiler" Settings: "Release"]
+Options=-pdr -o2 -fr"$(Proj_dir)\Release" -i"$(Proj_dir)" -i"." -d"_RELEASE" -mv6400+
+
+["DspBiosBuilder" Settings: "Debug"]
+Options=-Dconfig.importPath=".;../;%BIOS_INSTALL_DIR%/packages/ti/bios/examples/common;"
+
+["DspBiosBuilder" Settings: "Release"]
+Options=-Dconfig.importPath=".;../;%BIOS_INSTALL_DIR%/packages/ti/bios/examples/common;"
+
+["Linker" Settings: "Debug"]
+Options=-b -c -m".\Debug\TestApp.map" -o"..\out\appTest.out" -w -x -i"%BIOS_INSTALL_DIR%/packages/ti/rtdx/lib/c6000"
+
+["Linker" Settings: "Release"]
+Options=-c -m".\Release\main.map" -o".\Release\appC0.out" -w -x -i"%BIOS_INSTALL_DIR%/packages/ti/rtdx/lib/c6000"
+
+["..\..\3rdparty\gsmL1\src\delcom_gsm_L1_modules.lib" Settings: "Debug"]
+LinkOrder=4
+
+["..\src\maincfg.cmd" Settings: "Debug"]
+LinkOrder=3
+
+["..\src\maincfg.cmd" Settings: "Release"]
+LinkOrder=1
+
+["appC1cfg.cmd" Settings: "Debug"]
+LinkOrder=1
+
+["appC1cfg.cmd" Settings: "Release"]
+LinkOrder=1
+
+["appcfg.cmd" Settings: "Debug"]
+LinkOrder=2
+
+["appcfg.cmd" Settings: "Release"]
+LinkOrder=1
+

@@ -1,0 +1,1 @@
+"./uart.obj" "./spi.obj" "./singlecore_osal.obj" "./qmss_device.obj" "./phy_read_write.obj" "./phy.obj" "./pam_bin.obj" "./pa_mgmt.obj" "./flash.obj" "./cpsw_mgmt.obj" "./cppi_qmss_mgmt.obj" "./cppi_device.obj" "./classify2_bin.obj" "./classify1_bin.obj" "./Srio_devconfig.obj" "./Srio.obj" "./Mcbsp.obj" "./Gpo.obj" "./Gpio.obj" "./Gpi.obj" "./Ethernet_config.obj" 

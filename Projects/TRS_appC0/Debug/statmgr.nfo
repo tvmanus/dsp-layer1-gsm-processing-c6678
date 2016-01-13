@@ -1,0 +1,330 @@
+TMS320C6x C/C++ Optimizer               v7.3.4
+Build Number 1MCKN-KDADEMDK-RTARQ-WAR-ZAZG_X_T_U
+
+		======File-level Analysis Summary======
+
+
+extern void StatMgr_Fatal() is called from 0 sites in this file.
+    It appears to be inlineable (size = 8 units)
+    It has 3 non-trivial scope blocks nested 3 deep.
+    It calls these functions:
+	Gpo_Set() (1 times)
+	Gpo_Clear() (1 times)
+
+static unsigned char StatMgr_GetDSPStatus() is called from 1 sites in this file.
+    It has 3 non-trivial scope blocks nested 3 deep.
+    It calls these functions:
+	StatMgr_Manager() (1 times)
+	Gpo_Toggle() (1 times)
+	Gpo_Clear() (1 times)
+	 ? () (2 times)
+	StatMgr_IsSrio1RxOk() (1 times)
+	StatMgr_GetOperationMode() (1 times)
+
+static unsigned char StatMgr_GetOperationMode() is called from 1 sites in this file.
+    It has 3 non-trivial scope blocks nested 3 deep.
+    It calls these functions:
+	<NONE>
+
+extern struct tMutex *StatMgr_GetSignalPtr() is called from 0 sites in this file.
+    It appears to be inlineable (size = 2 units)
+    It has 3 non-trivial scope blocks nested 3 deep.
+    It calls these functions:
+	<NONE>
+
+extern void StatMgr_Init() is called from 0 sites in this file.
+    It appears to be inlineable (size = 43 units)
+    It has 3 non-trivial scope blocks nested 3 deep.
+    It calls these functions:
+	Task_Init1() (1 times)
+	Signal_Init() (2 times)
+	Gpo_Init() (5 times)
+	CmdIf_GetHandler() (1 times)
+
+static char StatMgr_IsSrio1RxOk() is called from 1 sites in this file.
+    It appears to be inlineable (size = 103 units)
+    It has 3 non-trivial scope blocks nested 3 deep.
+    It calls these functions:
+	StatMgr_Manager() (1 times)
+	 ? () (3 times)
+
+static void StatMgr_Manager() is called from 0 sites in this file.
+    It appears to be inlineable (size = 101 units)
+    It has 3 non-trivial scope blocks nested 3 deep.
+    It calls these functions:
+	StatMgr_GetDSPStatus() (1 times)
+	Gpo_Toggle() (1 times)
+	Gpo_Set() (1 times)
+	Gpo_Clear() (2 times)
+	Signal_Pend() (1 times)
+
+extern void StatMgr_Start() is called from 0 sites in this file.
+    It appears to be inlineable (size = 4 units)
+    It has 3 non-trivial scope blocks nested 3 deep.
+    It calls these functions:
+	Task_Start() (1 times)
+
+extern void StatusUpdate_Time() is called from 0 sites in this file.
+    It appears to be inlineable (size = 6 units)
+    It has 3 non-trivial scope blocks nested 3 deep.
+    It calls these functions:
+	Signal_Post() (1 times)
+
+extern void Update_DSP_Temp() is called from 0 sites in this file.
+    It appears to be inlineable (size = 15 units)
+    It has 3 non-trivial scope blocks nested 3 deep.
+    It calls these functions:
+	<NONE>
+
+extern void Update_FPGA_HM() is called from 0 sites in this file.
+    It appears to be inlineable (size = 27 units)
+    It has 3 non-trivial scope blocks nested 3 deep.
+    It calls these functions:
+	<NONE>
+
+extern void Update_GSP_data() is called from 0 sites in this file.
+    It appears to be inlineable (size = 27 units)
+    It has 3 non-trivial scope blocks nested 3 deep.
+    It calls these functions:
+	<NONE>
+
+extern void Update_RF_Status() is called from 0 sites in this file.
+    It appears to be inlineable (size = 93 units)
+    It has 3 non-trivial scope blocks nested 3 deep.
+    It calls these functions:
+	<NONE>
+
+extern void Update_RF_Temp() is called from 0 sites in this file.
+    It appears to be inlineable (size = 15 units)
+    It has 3 non-trivial scope blocks nested 3 deep.
+    It calls these functions:
+	<NONE>
+
+Variable has no explicitly assigned value:
+	extern unsigned long long nSrio1DoorBellCount
+
+Variable has no explicitly assigned value:
+	extern void (* const xdc_runtime_Main_Module__loggerFxn4__C)()
+
+Variable has no explicitly assigned value:
+	extern void (* const xdc_runtime_Main_Module__loggerFxn1__C)()
+
+Variable has no explicitly assigned value:
+	extern void * const xdc_runtime_Main_Module__loggerObj__C
+
+Variable has no explicitly assigned value:
+	extern const unsigned short xdc_runtime_Main_Module__loggerDefined__C
+
+Variable has no explicitly assigned value:
+	extern const unsigned short xdc_runtime_Main_Module__id__C
+
+Variable has no explicitly assigned value:
+	extern unsigned short * const xdc_runtime_Main_Module__diagsMask__C
+
+Variable has no explicitly assigned value:
+	extern const unsigned xdc_runtime_Main_Module__diagsIncluded__C
+
+Variable has no explicitly assigned value:
+	extern const unsigned xdc_runtime_Main_Module__diagsEnabled__C
+
+Global variable is not referenced in this file:
+	extern unsigned char AGC_PA_Status
+	extern char PLAYBACK_MODE
+	extern char READ_RF_STATUS
+
+Address of global variable is never taken:
+	static unsigned long long nLastDoorBellCount$3
+	static unsigned char nPrevOpMode$2
+	static unsigned char SecCounter$1
+	static struct tMutex *pSigStatus
+
+	extern unsigned char AGC_PA_TMA
+
+
+These functions may be recursive:
+	StatMgr_Fatal()
+	StatMgr_Init()
+	StatMgr_Manager()
+	StatMgr_GetDSPStatus()
+	StatMgr_IsSrio1RxOk()
+	StatMgr_Start()
+	StatusUpdate_Time()
+
+Making this function inlineable: StatMgr_IsSrio1RxOk()
+Inlineable function will be suppressed: StatMgr_IsSrio1RxOk()
+
+These external functions are called but not defined here:
+	Signal_Post()
+	Task_Start()
+	Signal_Pend()
+	CmdIf_GetHandler()
+	Gpo_Init()
+	Signal_Init()
+	Task_Init1()
+	 ? ()
+	Gpo_Toggle()
+	Gpo_Clear()
+	Gpo_Set()
+
+
+		======= End file-level Analysis =======
+
+
+==============================================================================
+
+extern void Update_RF_Temp() is called from 0 sites in this file.
+    It appears to be inlineable (size = 15 units)
+    It has 3 non-trivial scope blocks nested 3 deep.
+    It calls these functions:
+	<NONE>
+
+There are 4 memory accesses with 0 dependences.
+
+
+==============================================================================
+
+extern void Update_RF_Status() is called from 0 sites in this file.
+    It appears to be inlineable (size = 93 units)
+    It has 3 non-trivial scope blocks nested 3 deep.
+    It calls these functions:
+	<NONE>
+
+There are 17 memory accesses with 1 dependences.
+
+
+==============================================================================
+
+extern void Update_GSP_data() is called from 0 sites in this file.
+    It appears to be inlineable (size = 27 units)
+    It has 3 non-trivial scope blocks nested 3 deep.
+    It calls these functions:
+	<NONE>
+
+Optimization summary for same-iteration parallelism (ILP)
+in Update_GSP_data()
+
+  Combining this assignment: *&GPS_DATA = (unsigned)*((unsigned char *)(unsigned char (* const)[172])pPacket+5);  (line 840)
+       with this assignment: *(&GPS_DATA+4) = (unsigned)*((unsigned char *)(unsigned char (* const)[172])pPacket+6);  (line 841)
+         giving this result: *&GPS_DATA = PACK((unsigned)*((unsigned char *)(unsigned char (* const)[172])pPacket+5), (unsigned)*((unsigned char *)(unsigned char (* const)[172])pPacket+6));
+
+  Combining this assignment: *(&GPS_DATA+8) = (unsigned)*((unsigned char *)(unsigned char (* const)[172])pPacket+7);  (line 842)
+       with this assignment: *(&GPS_DATA+12) = (unsigned)*((unsigned char *)(unsigned char (* const)[172])pPacket+8);  (line 843)
+         giving this result: *(&GPS_DATA+8) = PACK((unsigned)*((unsigned char *)(unsigned char (* const)[172])pPacket+7), (unsigned)*((unsigned char *)(unsigned char (* const)[172])pPacket+8));
+
+
+There are 6 memory accesses with 0 dependences.
+
+
+==============================================================================
+
+extern void Update_FPGA_HM() is called from 0 sites in this file.
+    It appears to be inlineable (size = 27 units)
+    It has 3 non-trivial scope blocks nested 3 deep.
+    It calls these functions:
+	<NONE>
+
+There are 8 memory accesses with 0 dependences.
+
+
+==============================================================================
+
+extern void Update_DSP_Temp() is called from 0 sites in this file.
+    It appears to be inlineable (size = 15 units)
+    It has 3 non-trivial scope blocks nested 3 deep.
+    It calls these functions:
+	<NONE>
+
+There are 4 memory accesses with 0 dependences.
+
+
+==============================================================================
+
+extern void StatusUpdate_Time() is called from 0 sites in this file.
+    It appears to be inlineable (size = 6 units)
+    It has 3 non-trivial scope blocks nested 3 deep.
+    It calls these functions:
+	<NONE>
+
+There are 0 memory accesses with 0 dependences.
+
+
+==============================================================================
+
+extern void StatMgr_Start() is called from 0 sites in this file.
+    It appears to be inlineable (size = 4 units)
+    It has 3 non-trivial scope blocks nested 3 deep.
+    It calls these functions:
+	<NONE>
+
+There are 0 memory accesses with 0 dependences.
+
+
+==============================================================================
+
+static unsigned char StatMgr_GetOperationMode() is called from 1 sites in this file.
+    It has 3 non-trivial scope blocks nested 3 deep.
+    It calls these functions:
+	<NONE>
+
+There are 4 memory accesses with 5 dependences.
+
+
+==============================================================================
+
+static unsigned char StatMgr_GetDSPStatus() is called from 1 sites in this file.
+    It has 3 non-trivial scope blocks nested 3 deep.
+    It calls these functions:
+	StatMgr_GetOperationMode() (1 times)
+	StatMgr_IsSrio1RxOk() (1 times)
+	StatMgr_Manager() (1 times)
+	*** StatMgr_GetDSPStatus()'s return value is not needed:return nStatus;
+
+There are 67 memory accesses with 217 dependences.
+
+
+==============================================================================
+
+static void StatMgr_Manager() is called from 0 sites in this file.
+    It appears to be inlineable (size = 101 units)
+    It has 3 non-trivial scope blocks nested 3 deep.
+    It calls these functions:
+	StatMgr_GetDSPStatus() (1 times)
+
+There are 23 memory accesses with 396 dependences.
+
+
+==============================================================================
+
+extern void StatMgr_Init() is called from 0 sites in this file.
+    It appears to be inlineable (size = 43 units)
+    It has 3 non-trivial scope blocks nested 3 deep.
+    It calls these functions:
+	<NONE>
+
+There are 2 memory accesses with 0 dependences.
+
+
+==============================================================================
+
+extern struct tMutex *StatMgr_GetSignalPtr() is called from 0 sites in this file.
+    It appears to be inlineable (size = 2 units)
+    It has 3 non-trivial scope blocks nested 3 deep.
+    It calls these functions:
+	<NONE>
+
+There are 1 memory accesses with 0 dependences.
+
+
+==============================================================================
+
+extern void StatMgr_Fatal() is called from 0 sites in this file.
+    It appears to be inlineable (size = 8 units)
+    It has 3 non-trivial scope blocks nested 3 deep.
+    It calls these functions:
+	<NONE>
+
+There are 0 memory accesses with 0 dependences.
+
+<<NULL MIX DOMAIN>>
+
+== END OF INFO OUTPUT==

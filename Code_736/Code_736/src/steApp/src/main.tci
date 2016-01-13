@@ -1,0 +1,33 @@
+/*
+ *  Copyright 2008 by Texas Instruments Incorporated.
+ *  All rights reserved. Property of Texas Instruments Incorporated.
+ *  Restricted rights to use, duplicate or disclose this code are
+ *  granted through contract.
+ *
+ *  @(#) DSP/BIOS_Examples 5,3,3 09-23-2008 (biosEx-j03)
+ */
+/*
+ *  ======== msgq_swi2swi.tci ========
+ */
+
+/* 
+ * Create a LOG object logTrace 
+ */
+var trace      = bios.LOG.create( "trace" );
+trace.comment  = "default LOG object for application messages";
+trace.bufLen   = 256;
+
+/* 
+ *  Change the size of the LOG_system object to a value large enough
+ */
+bios.LOG_system.bufLen = 256;
+
+/*  Enable TSK Manger */
+bios.enableTskManager(prog);
+
+/*  Enable MSGQ and POOL Managers */
+bios.MSGQ.ENABLEMSGQ=true;
+bios.POOL.ENABLEPOOL=true;
+
+
+

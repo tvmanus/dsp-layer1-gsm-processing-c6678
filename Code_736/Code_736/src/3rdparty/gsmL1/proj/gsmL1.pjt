@@ -1,0 +1,38 @@
+; Code Composer Project File, Version 2.0 (do not modify or remove this line)
+
+[Project Settings]
+ProjectDir="F:\santhosh\MemoryReorganize\Code654a+iipc_fix+code_opt+data_opt\code_654a+\Code\src\3rdparty\gsmL1\proj\"
+ProjectType=Library
+CPUFamily=TMS320C64XX
+Tool="Archiver"
+Tool="Compiler"
+Tool="CustomBuilder"
+Tool="DspBiosBuilder"
+Config="Debug"
+Config="Release"
+
+[Source Files]
+Source="..\src\beagle_setup.c"
+Source="..\src\bits_pack_unpack.c"
+Source="..\src\egprs_edge_sim_laurent_data.c"
+Source="..\src\generic_pulse_shaper.c"
+Source="..\testApp\test_gsmL1.txt"
+
+["Archiver" Settings: "Debug"]
+Options=-r -o"..\Out\GSML1.lib"
+
+["Archiver" Settings: "Release"]
+Options=-r -o".\Release\GSML1.lib"
+
+["Compiler" Settings: "Debug"]
+Options=-g -pm -pdsw225 -o3 -fr"$(Proj_dir)\Debug" -i"..\include\" -i"..\..\..\include\" -i"..\..\..\stemgr\diagif\include" -d"_DEBUG" -mt -mh32 -ms0 -mf5 -mv6400+ --mem_model:data=far --gcc
+
+["Compiler" Settings: "Release"]
+Options=-pdsw225 -o3 -fr"$(Proj_dir)\Release" -mv6400
+
+["..\testApp\test_gsmL1.txt" Settings: "Debug"]
+ExcludeFromBuild=true
+
+["..\testApp\test_gsmL1.txt" Settings: "Release"]
+ExcludeFromBuild=true
+

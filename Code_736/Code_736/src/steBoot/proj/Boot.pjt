@@ -1,0 +1,55 @@
+; Code Composer Project File, Version 2.0 (do not modify or remove this line)
+
+[Project Settings]
+ProjectDir="F:\santhosh\code_654+Target+Log+CB\Code\src\steBoot\proj\"
+ProjectType=Executable
+CPUFamily=TMS320C64XX
+Tool="Compiler"
+Tool="CustomBuilder"
+Tool="DspBiosBuilder"
+Tool="Linker"
+Config="Debug"
+Config="Release"
+
+[Project Dependencies]
+Source="..\..\steDrv\BootDrv\proj\bootdrv.pjt"
+Source="..\..\steMgr\flash\proj\Flash.pjt"
+
+["..\..\steDrv\BootDrv\proj\bootdrv.pjt" Settings]
+MatchConfigName=true
+
+["..\..\steMgr\flash\proj\Flash.pjt" Settings]
+MatchConfigName=true
+
+[Source Files]
+Source="..\..\3rdparty\TI\src\csl.lib"
+Source="..\..\3rdparty\TI\src\csl_c64xplus_intc.lib"
+Source="..\..\3rdparty\TI\src\rts64plus.lib"
+Source="..\..\steDrv\BootDrv\Out\bootdrv.lib"
+Source="..\..\steMgr\flash\out\Flash.lib"
+Source="..\src\BootPkt.c"
+Source="..\src\csl_emac.c"
+Source="..\src\csl_mdio.c"
+Source="..\src\evminit.c"
+Source="..\src\loader.c"
+Source="..\src\loadermain.c"
+Source="linkC0.cmd"
+
+["Compiler" Settings: "Debug"]
+Options=-pdsw225 -o3 -fr"$(Proj_dir)\Debug" -i"..\..\include" -i"..\..\stedrv\include" -i"..\..\stedrv\bootdrv\include" -i"..\..\stemgr\flash\include" -i"..\include" -i"..\..\stemgr\diagif\include" -d"_DEBUG" -ms3 -mv6400+
+
+["Compiler" Settings: "Release"]
+Options=-pdsw225 -o3 -fr"$(Proj_dir)\Release" -mv6400
+
+["Linker" Settings: "Debug"]
+Options=-c -m".\Debug\Boot.map" -o"..\out\core0.out" -w -x -i"C:\CCStudio_v3.3\C6000\cgtools\lib"
+
+["Linker" Settings: "Release"]
+Options=-c -m".\Release\Boot.map" -o".\Release\Boot.out" -w -x
+
+["linkC0.cmd" Settings: "Debug"]
+LinkOrder=1
+
+["linkC0.cmd" Settings: "Release"]
+LinkOrder=1
+

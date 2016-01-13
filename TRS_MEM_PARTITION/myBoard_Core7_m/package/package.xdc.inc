@@ -1,0 +1,13 @@
+package.xdc
+Platform.xdc
+Platform.xs
+package/myBoard_Core7_m.sch
+package/.vers_g180
+package/.vers_r170
+package/.vers_b160
+package/.xdc-z63
+package/myBoard_Core7_m.java
+package/myBoard_Core7_m.class
+package/package_myBoard_Core7_m.c
+package/package.defs.h
+package/myBoard_Core7_m.ccs

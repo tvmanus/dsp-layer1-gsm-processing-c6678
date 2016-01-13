@@ -1,0 +1,167 @@
+TMS320C6x C/C++ Optimizer               v7.3.4
+Build Number 1MCKN-KDADEMDK-RTARQ-WAR-ZAZG_X_T_U
+
+		======File-level Analysis Summary======
+
+
+extern unsigned short EthBuff_GetDumpSize() is called from 0 sites in this file.
+    It appears to be inlineable (size = 45 units)
+    It has 3 non-trivial scope blocks nested 3 deep.
+    It calls these functions:
+	<NONE>
+
+extern char *EthBuff_GetReadPtr() is called from 0 sites in this file.
+    It appears to be inlineable (size = 17 units)
+    It has 3 non-trivial scope blocks nested 3 deep.
+    It calls these functions:
+	<NONE>
+
+extern char *EthBuff_GetWritePtr() is called from 2 sites in this file.
+    It appears to be inlineable (size = 71 units)
+    It has 3 non-trivial scope blocks nested 3 deep.
+    It calls these functions:
+	strlen() (1 times)
+	sprintf() (1 times)
+	 ? () (1 times)
+
+extern void EthBuff_Init() is called from 0 sites in this file.
+    It appears to be inlineable (size = 31 units)
+    It has 3 non-trivial scope blocks nested 3 deep.
+    It calls these functions:
+	<NONE>
+
+extern void Eth_Debug() is called from 0 sites in this file.
+    It has 3 non-trivial scope blocks nested 3 deep.
+    It calls these functions:
+	vsprintf() (1 times)
+	EthBuff_GetWritePtr() (1 times)
+
+extern void Eth_Debug2() is called from 0 sites in this file.
+    It has 3 non-trivial scope blocks nested 3 deep.
+    It calls these functions:
+	vsprintf() (1 times)
+	EthBuff_GetWritePtr() (1 times)
+
+static unsigned strlen() is called from 1 sites in this file.
+    It appears to be inlineable (size = 15 units)
+    It has 3 non-trivial scope blocks nested 3 deep.
+    It calls these functions:
+	<NONE>
+
+Variable has no explicitly assigned value:
+	extern volatile void *pEthObj
+
+Variable has no explicitly assigned value:
+	extern void (* const xdc_runtime_Main_Module__loggerFxn1__C)()
+
+Variable has no explicitly assigned value:
+	extern void * const xdc_runtime_Main_Module__loggerObj__C
+
+Variable has no explicitly assigned value:
+	extern const unsigned short xdc_runtime_Main_Module__loggerDefined__C
+
+Variable has no explicitly assigned value:
+	extern const unsigned short xdc_runtime_Main_Module__id__C
+
+Variable has no explicitly assigned value:
+	extern unsigned short * const xdc_runtime_Main_Module__diagsMask__C
+
+Variable has no explicitly assigned value:
+	extern const unsigned xdc_runtime_Main_Module__diagsIncluded__C
+
+Variable has no explicitly assigned value:
+	extern const unsigned xdc_runtime_Main_Module__diagsEnabled__C
+
+
+These functions may be recursive:
+	Eth_Debug()
+	Eth_Debug2()
+	EthBuff_GetWritePtr()
+Inlineable function will be suppressed: strlen()
+
+These external functions are called but not defined here:
+	vsprintf()
+	sprintf()
+	 ? ()
+
+
+		======= End file-level Analysis =======
+
+
+==============================================================================
+
+extern char *EthBuff_GetWritePtr() is called from 2 sites in this file.
+    It appears to be inlineable (size = 71 units)
+    It has 3 non-trivial scope blocks nested 3 deep.
+    It calls these functions:
+	strlen() (1 times)
+
+There are 20 memory accesses with 21 dependences.
+
+
+==============================================================================
+
+extern void Eth_Debug2() is called from 0 sites in this file.
+    It has 3 non-trivial scope blocks nested 3 deep.
+    It calls these functions:
+	EthBuff_GetWritePtr() (1 times)
+
+There are 2 memory accesses with 0 dependences.
+
+
+==============================================================================
+
+extern void Eth_Debug() is called from 0 sites in this file.
+    It has 3 non-trivial scope blocks nested 3 deep.
+    It calls these functions:
+	EthBuff_GetWritePtr() (1 times)
+
+There are 2 memory accesses with 0 dependences.
+
+
+==============================================================================
+
+extern void EthBuff_Init() is called from 0 sites in this file.
+    It appears to be inlineable (size = 31 units)
+    It has 3 non-trivial scope blocks nested 3 deep.
+    It calls these functions:
+	<NONE>
+
+
+Optimization summary for cross-iteration vectorization (SIMD)
+in EthBuff_Init()
+
+  Unrolling and vectorizing the "for" loop at lines D:/WorkLocation/Code_736/Code_736/src/steApp/src/EthBuff.c:23-26 by a factor of 8x.
+  This loop has 2048 iterations.
+
+  Vectorizing this store 8x at line 25: *(char *)((char *)pThis+nBlock+24) = S2V(0LL);
+          in this statement: ((char *)pThis)[nBlock+24] = 0;
+
+
+There are 9 memory accesses with 20 dependences.
+
+
+==============================================================================
+
+extern char *EthBuff_GetReadPtr() is called from 0 sites in this file.
+    It appears to be inlineable (size = 17 units)
+    It has 3 non-trivial scope blocks nested 3 deep.
+    It calls these functions:
+	<NONE>
+
+There are 3 memory accesses with 0 dependences.
+
+
+==============================================================================
+
+extern unsigned short EthBuff_GetDumpSize() is called from 0 sites in this file.
+    It appears to be inlineable (size = 45 units)
+    It has 3 non-trivial scope blocks nested 3 deep.
+    It calls these functions:
+	<NONE>
+
+There are 6 memory accesses with 7 dependences.
+
+<<NULL MIX DOMAIN>>
+
+== END OF INFO OUTPUT==

@@ -1,0 +1,38 @@
+; Code Composer Project File, Version 2.0 (do not modify or remove this line)
+
+[Project Settings]
+ProjectDir="D:\Bala\WIP\Codebase_650\Code\src\steBoot\proj\"
+ProjectType=Executable
+CPUFamily=TMS320C64XX
+Tool="Compiler"
+Tool="CustomBuilder"
+Tool="DspBiosBuilder"
+Tool="Linker"
+Config="Debug"
+Config="Release"
+
+[Source Files]
+Source="..\..\3rdparty\TI\src\csl.lib"
+Source="..\..\3rdparty\TI\src\csl_c64xplus_intc.lib"
+Source="..\..\steDrv\BootDrv\Out\bootdrv.lib"
+Source="..\src\LoaderC1.c"
+Source="linkC1.cmd"
+
+["Compiler" Settings: "Debug"]
+Options=-pdsw225 -o3 -fr"$(Proj_dir)\Debug" -i"..\..\include" -i"..\..\stedrv\bootdrv\include" -i"..\..\stedrv\include" -i"..\include" -d"_DEBUG" -ms3 -mv6400+
+
+["Compiler" Settings: "Release"]
+Options=-pdsw225 -o3 -fr"$(Proj_dir)\Release" -mv6400
+
+["Linker" Settings: "Debug"]
+Options=-c -m".\Debug\BootC1.map" -o"..\out\core1.out" -w -x
+
+["Linker" Settings: "Release"]
+Options=-c -m".\Release\BootC1.map" -o".\Release\BootC1.out" -w -x
+
+["linkC1.cmd" Settings: "Debug"]
+LinkOrder=1
+
+["linkC1.cmd" Settings: "Release"]
+LinkOrder=1
+

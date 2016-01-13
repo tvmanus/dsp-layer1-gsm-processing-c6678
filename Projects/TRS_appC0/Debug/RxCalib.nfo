@@ -1,0 +1,155 @@
+TMS320C6x C/C++ Optimizer               v7.3.4
+Build Number 1MCKN-KDADEMDK-RTARQ-WAR-ZAZG_X_T_U
+
+		======File-level Analysis Summary======
+
+
+extern short RxCalib_GetHwGainCorrection() is called from 0 sites in this file.
+    It appears to be inlineable (size = 51 units)
+    It has 3 non-trivial scope blocks nested 3 deep.
+    It calls these functions:
+	<NONE>
+
+extern short RxCalib_GetRfGainCorrection() is called from 0 sites in this file.
+    It appears to be inlineable (size = 52 units)
+    It has 3 non-trivial scope blocks nested 3 deep.
+    It calls these functions:
+	<NONE>
+
+extern void RxCalib_InitHwGainCorrection() is called from 0 sites in this file.
+    It appears to be inlineable (size = 78 units)
+    It has 3 non-trivial scope blocks nested 3 deep.
+    It calls these functions:
+	RxCalib_UpdateHwGainCorrection() (18 times)
+	memset() (1 times)
+
+extern void RxCalib_InitRfGainCorrection() is called from 0 sites in this file.
+    It appears to be inlineable (size = 31 units)
+    It has 3 non-trivial scope blocks nested 3 deep.
+    It calls these functions:
+	RxCalib_UpdateRfGainCorrection() (6 times)
+
+extern void RxCalib_InitRfGainDefault() is called from 0 sites in this file.
+    It appears to be inlineable (size = 25 units)
+    It has 3 non-trivial scope blocks nested 3 deep.
+    It calls these functions:
+	<NONE>
+
+static void RxCalib_UpdateHwGainCorrection() is called from 18 sites in this file.
+    It appears to be inlineable (size = 41 units)
+    It has 3 non-trivial scope blocks nested 3 deep.
+    It calls these functions:
+	<NONE>
+
+extern void RxCalib_UpdateRfGainCorrection() is called from 6 sites in this file.
+    It appears to be inlineable (size = 37 units)
+    It has 3 non-trivial scope blocks nested 3 deep.
+    It calls these functions:
+	<NONE>
+
+Variable has no explicitly assigned value:
+	extern volatile struct $fake0 *pRxCalibration
+
+Address of global variable is never taken:
+	static unsigned short CurrBlockNum$2
+	static char FirstEntry$1
+
+
+
+Results of interprocedural value propagation:
+
+   static void RxCalib_UpdateHwGainCorrection() has these parameter attributes:
+      unsigned short nArfcnLow :  nArfcnLow <= 1006u;
+      unsigned short nArfcnHigh :  nArfcnHigh <= 1023u;  nArfcnHigh >= 60u;
+      short HwGainCorrectiondB :  HwGainCorrectiondB <= 10;  HwGainCorrectiondB >= 2;
+
+Making this function inlineable: RxCalib_UpdateHwGainCorrection()
+
+Making this function inlineable: RxCalib_UpdateRfGainCorrection()
+
+These external functions are called but not defined here:
+	memset()
+
+
+		======= End file-level Analysis =======
+
+
+==============================================================================
+
+extern void RxCalib_UpdateRfGainCorrection() is called from 6 sites in this file.
+    It appears to be inlineable (size = 37 units)
+    It has 3 non-trivial scope blocks nested 3 deep.
+    It calls these functions:
+	<NONE>
+
+There are 10 memory accesses with 6 dependences.
+
+
+==============================================================================
+
+extern void RxCalib_InitRfGainDefault() is called from 0 sites in this file.
+    It appears to be inlineable (size = 25 units)
+    It has 3 non-trivial scope blocks nested 3 deep.
+    It calls these functions:
+	<NONE>
+
+There are 9 memory accesses with 4 dependences.
+
+
+==============================================================================
+
+extern void RxCalib_InitRfGainCorrection() is called from 0 sites in this file.
+    It appears to be inlineable (size = 31 units)
+    It has 3 non-trivial scope blocks nested 3 deep.
+    It calls these functions:
+	RxCalib_UpdateRfGainCorrection() (6 times)
+
+There are 18 memory accesses with 34 dependences.
+
+
+==============================================================================
+
+static void RxCalib_UpdateHwGainCorrection() is called from 18 sites in this file.
+    It appears to be inlineable (size = 41 units)
+    It has 3 non-trivial scope blocks nested 3 deep.
+    It calls these functions:
+	<NONE>
+
+There are 6 memory accesses with 1 dependences.
+
+
+==============================================================================
+
+extern void RxCalib_InitHwGainCorrection() is called from 0 sites in this file.
+    It appears to be inlineable (size = 78 units)
+    It has 3 non-trivial scope blocks nested 3 deep.
+    It calls these functions:
+	RxCalib_UpdateHwGainCorrection() (18 times)
+
+There are 10 memory accesses with 5 dependences.
+
+
+==============================================================================
+
+extern short RxCalib_GetRfGainCorrection() is called from 0 sites in this file.
+    It appears to be inlineable (size = 52 units)
+    It has 3 non-trivial scope blocks nested 3 deep.
+    It calls these functions:
+	<NONE>
+
+There are 5 memory accesses with 0 dependences.
+
+
+==============================================================================
+
+extern short RxCalib_GetHwGainCorrection() is called from 0 sites in this file.
+    It appears to be inlineable (size = 51 units)
+    It has 3 non-trivial scope blocks nested 3 deep.
+    It calls these functions:
+	<NONE>
+
+There are 4 memory accesses with 0 dependences.
+
+<<NULL MIX DOMAIN>>
+
+== END OF INFO OUTPUT==

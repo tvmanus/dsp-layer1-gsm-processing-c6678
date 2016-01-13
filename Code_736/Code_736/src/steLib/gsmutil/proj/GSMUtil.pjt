@@ -1,0 +1,39 @@
+; Code Composer Project File, Version 2.0 (do not modify or remove this line)
+
+[Project Settings]
+ProjectDir="F:\santhosh\MemoryReorganize\Code654a+iipc_fix+code_opt+data_opt\code_654a+\Code\src\steLib\gsmutil\proj\"
+ProjectType=Library
+CPUFamily=TMS320C64XX
+Tool="Archiver"
+Tool="Compiler"
+Tool="CustomBuilder"
+Tool="DspBiosBuilder"
+Config="Debug"
+Config="Release"
+
+[Project Dependencies]
+Source="..\..\genutil\proj\GenUtil.pjt"
+
+["..\..\genutil\proj\GenUtil.pjt" Settings]
+MatchConfigName=true
+
+[Source Files]
+Source="..\src\Burst.c"
+Source="..\src\Clock.c"
+Source="..\src\GSMTime.c"
+Source="..\src\L1FEC.c"
+Source="..\src\TDFrm.c"
+Source="..\src\TDFrmTbl.c"
+
+["Archiver" Settings: "Debug"]
+Options=-r -o"..\out\GSMUtil.lib"
+
+["Archiver" Settings: "Release"]
+Options=-r -o".\Release\GSMUtil.lib"
+
+["Compiler" Settings: "Debug"]
+Options=-g -pm -pdsw225 -o3 -fr"$(Proj_dir)\debug" -i"..\include\" -i"..\..\..\include\" -i"..\..\..\3rdParty\gsmL1\include\" -i"..\..\..\steDrv\include" -i"..\..\..\stelib\genutil\include\" -i"..\..\..\stedrv\Platform\include\" -i"..\..\..\stemgr\diagif\include" -d"_DEBUG" -ms0 -mf5 -mv6400 --gcc
+
+["Compiler" Settings: "Release"]
+Options=-pdsw225 -o3 -fr"$(Proj_dir)\Release" -mv6400
+

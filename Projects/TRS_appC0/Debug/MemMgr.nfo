@@ -1,0 +1,93 @@
+TMS320C6x C/C++ Optimizer               v7.3.4
+Build Number 1MCKN-KDADEMDK-RTARQ-WAR-ZAZG_X_T_U
+
+		======File-level Analysis Summary======
+
+
+extern void MemMgr_InitCriticalMemory() is called from 0 sites in this file.
+    It appears to be inlineable (size = 206 units)
+    It has 3 non-trivial scope blocks nested 3 deep.
+    It calls these functions:
+	 ? () (2 times)
+	memset() (5 times)
+
+extern char MemMgr_InitHeapMemory() is called from 0 sites in this file.
+    It appears to be inlineable (size = 191 units)
+    It has 3 non-trivial scope blocks nested 3 deep.
+    It calls these functions:
+	 ? () (3 times)
+	Initialize_HashNewBucket() (1 times)
+
+Variable has no explicitly assigned value:
+	extern volatile struct haredMem *gCriticalMemRefPtr
+
+Variable has no explicitly assigned value:
+	extern void (* const xdc_runtime_Main_Module__loggerFxn2__C)()
+
+Variable has no explicitly assigned value:
+	extern void * const xdc_runtime_Main_Module__loggerObj__C
+
+Variable has no explicitly assigned value:
+	extern const unsigned short xdc_runtime_Main_Module__loggerDefined__C
+
+Variable has no explicitly assigned value:
+	extern const unsigned short xdc_runtime_Main_Module__id__C
+
+Variable has no explicitly assigned value:
+	extern unsigned short * const xdc_runtime_Main_Module__diagsMask__C
+
+Variable has no explicitly assigned value:
+	extern const unsigned xdc_runtime_Main_Module__diagsIncluded__C
+
+Variable has no explicitly assigned value:
+	extern const unsigned xdc_runtime_Main_Module__diagsEnabled__C
+
+Address of global variable is never taken:
+	extern volatile struct $fake7 *pRxCalibration
+	extern volatile struct haredBurstToFPGAMgr *pGSharedBurstToFPGAMgr
+	extern volatile struct $fake3 *pEthBuff
+	extern volatile struct haredL2PacketMgr *gSharedL2PacketMgr
+	extern volatile struct tTransferJob *pGblTransferJob
+	extern volatile struct tHSEM *gBTSSem
+	extern volatile struct SMConfig *gBTS
+	extern volatile struct tInterCoreLink *Links
+	extern volatile unsigned long long *MSGIndication
+
+
+These functions may be recursive:
+	MemMgr_InitCriticalMemory()
+	MemMgr_InitHeapMemory()
+
+These external functions are called but not defined here:
+	memset()
+	Initialize_HashNewBucket()
+	 ? ()
+
+
+		======= End file-level Analysis =======
+
+
+==============================================================================
+
+extern char MemMgr_InitHeapMemory() is called from 0 sites in this file.
+    It appears to be inlineable (size = 191 units)
+    It has 3 non-trivial scope blocks nested 3 deep.
+    It calls these functions:
+	<NONE>
+
+There are 26 memory accesses with 4 dependences.
+
+
+==============================================================================
+
+extern void MemMgr_InitCriticalMemory() is called from 0 sites in this file.
+    It appears to be inlineable (size = 206 units)
+    It has 3 non-trivial scope blocks nested 3 deep.
+    It calls these functions:
+	<NONE>
+
+There are 62 memory accesses with 5 dependences.
+
+<<NULL MIX DOMAIN>>
+
+== END OF INFO OUTPUT==

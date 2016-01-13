@@ -1,0 +1,130 @@
+TMS320C6x C/C++ Optimizer               v7.3.4
+Build Number 1MCKN-KDADEMDK-RTARQ-WAR-ZAZG_X_T_U
+
+		======File-level Analysis Summary======
+
+
+extern void main() is called from 0 sites in this file.
+    It has 3 non-trivial scope blocks nested 3 deep.
+    It calls these functions:
+	ti_sysbios_BIOS_start__E() (1 times)
+	ti_sysbios_BIOS_exit__E() (1 times)
+	xdc_runtime_uart_write__E() (1 times)
+	ti_sysbios_knl_Task_create() (1 times)
+	ti_sysbios_knl_Task_Params_init() (1 times)
+	TRS_main() (1 times)
+	xdc_runtime_Error_init__E() (1 times)
+
+extern void taskFxn() is called from 0 sites in this file.
+    It appears to be inlineable (size = 5 units)
+    It has 3 non-trivial scope blocks nested 3 deep.
+    It calls these functions:
+	_enable_interrupts() (1 times)
+	Test_SPU_FPGA_Inte_withJTAG() (1 times)
+	ti_sysbios_knl_Task_sleep__E() (1 times)
+
+extern void test_fn() is called from 0 sites in this file.
+    It appears to be inlineable (size = 28 units)
+    It has 3 non-trivial scope blocks nested 3 deep.
+    It calls these functions:
+	taskFxn() (1 times)
+	 ? () (1 times)
+
+static void ti_sysbios_knl_Task_Params_init() is called from 1 sites in this file.
+    It appears to be inlineable (size = 10 units)
+    It has 3 non-trivial scope blocks nested 3 deep.
+    It calls these functions:
+	ti_sysbios_knl_Task_Params__init__S() (1 times)
+
+static struct i_sysbios_knl_Task_Object *ti_sysbios_knl_Task_create() is called from 1 sites in this file.
+    It appears to be inlineable (size = 15 units)
+    It has 3 non-trivial scope blocks nested 3 deep.
+    It calls these functions:
+	ti_sysbios_knl_Task_Object__create__S() (1 times)
+
+Variable has no explicitly assigned value:
+	extern void (* const xdc_runtime_Main_Module__loggerFxn1__C)()
+
+Variable has no explicitly assigned value:
+	extern void * const xdc_runtime_Main_Module__loggerObj__C
+
+Variable has no explicitly assigned value:
+	extern const unsigned short xdc_runtime_Main_Module__loggerDefined__C
+
+Variable has no explicitly assigned value:
+	extern const unsigned short xdc_runtime_Main_Module__id__C
+
+Variable has no explicitly assigned value:
+	extern unsigned short * const xdc_runtime_Main_Module__diagsMask__C
+
+Variable has no explicitly assigned value:
+	extern const unsigned xdc_runtime_Main_Module__diagsIncluded__C
+
+Variable has no explicitly assigned value:
+	extern const unsigned xdc_runtime_Main_Module__diagsEnabled__C
+
+
+These functions may be recursive:
+	main()
+	ti_sysbios_knl_Task_create()
+	ti_sysbios_knl_Task_Params_init()
+	test_fn()
+	taskFxn()
+
+Function ti_sysbios_knl_Task_create() will be specialized on these parameters:
+	[1] fxn == &taskFxn;
+Inlineable function will be suppressed: ti_sysbios_knl_Task_Params_init()
+Inlineable function will be suppressed: ti_sysbios_knl_Task_create()
+
+These external functions are called but not defined here:
+	ti_sysbios_knl_Task_Object__create__S()
+	ti_sysbios_knl_Task_Params__init__S()
+	 ? ()
+	ti_sysbios_knl_Task_sleep__E()
+	Test_SPU_FPGA_Inte_withJTAG()
+	_enable_interrupts()
+	xdc_runtime_Error_init__E()
+	TRS_main()
+	xdc_runtime_uart_write__E()
+	ti_sysbios_BIOS_exit__E()
+	ti_sysbios_BIOS_start__E()
+
+
+		======= End file-level Analysis =======
+
+
+==============================================================================
+
+extern void taskFxn() is called from 0 sites in this file.
+    It appears to be inlineable (size = 5 units)
+    It has 3 non-trivial scope blocks nested 3 deep.
+    It calls these functions:
+	<NONE>
+
+There are 0 memory accesses with 0 dependences.
+
+
+==============================================================================
+
+extern void test_fn() is called from 0 sites in this file.
+    It appears to be inlineable (size = 28 units)
+    It has 3 non-trivial scope blocks nested 3 deep.
+    It calls these functions:
+	taskFxn() (1 times)
+
+There are 8 memory accesses with 0 dependences.
+
+
+==============================================================================
+
+extern void main() is called from 0 sites in this file.
+    It has 3 non-trivial scope blocks nested 3 deep.
+    It calls these functions:
+	ti_sysbios_knl_Task_Params_init() (1 times)
+	ti_sysbios_knl_Task_create() (1 times)
+
+There are 2 memory accesses with 0 dependences.
+
+<<NULL MIX DOMAIN>>
+
+== END OF INFO OUTPUT==

@@ -1,0 +1,27 @@
+---------------------------  L1Manager.pjt - Debug  ---------------------------
+"C:\CCStudio_v3.3\C6000\cgtools\bin\cl6x" -g -pm -pdsw225 -o3 -fr"F:/Codebase/Code_736/src/steMgr/arfcn/proj/Debug" -i"../include/" -i"../../../include/" -i"../../../3rdParty/gsmL1/include/" -i"../../../steLib/gsmutil/include/" -i"../../../steLib/commandIf/include" -i"../../steLib/commandIf/include" -i"../../steLib/genutil/include" -i"../../../steLib/genutil/include" -i"../../../steDrv/include" -i"../../../stedrv/platform/include/" -i"../../../stemgr/dataif/include" -i"../../../steMgr/commandif/include" -i"../../../stemgr/include" -i"../../diagif/include" -i"../../status/include" -d"_DEBUG" -ms0 -mf5 -mv6400 --gcc -@"../proj/Debug.lkf"
+[GSMConfig.c]
+[L1Config.c]
+[L1Manager.c]
+"F:\Codebase\Code_736\src\steMgr\arfcn\src\L1Manager.c", line 743: warning: variable "oPrevTime" was set but never used
+[L1Receiver.c]
+"F:\Codebase\Code_736\src\steMgr\arfcn\src\L1Receiver.c", line 1163: warning: function "L1Receiver_EstimateFreq" was declared but never referenced
+[L1Transmitter.c]
+[RxManager.c]
+[TRXCommon.c]
+[TxManager.c]
+"F:\Codebase\Code_736\src\steMgr\arfcn\src\TxManager.c", line 213: warning: variable "oPrevDataSentTime" was declared but never referenced
+"F:\Codebase\Code_736\src\steMgr\arfcn\src\TxManager.c", line 214: warning: variable "nSACCH_MFN" was declared but never referenced
+"F:\Codebase\Code_736\src\steMgr\arfcn\src\TxManager.c", line 2673: warning: argument of type "volatile L1FEC *" is incompatible with parameter of type "L1FEC *"
+"F:\Codebase\Code_736\src\steMgr\arfcn\src\TxManager.c", line 2825: warning: argument of type "volatile L1FEC *" is incompatible with parameter of type "L1FEC *"
+"F:\Codebase\Code_736\src\steMgr\arfcn\src\TxManager.c", line 619: warning: function "TxManager_UpdateDCS_DACNCOfuse" was declared but never referenced
+<Optimizing>
+<Generating>
+<Assembling>
+
+[Archiving...] "C:\CCStudio_v3.3\C6000\cgtools\bin\ar6x" @"Debug.lkf"
+  ==>  new archive 'F:\Codebase\Code_736\src\steMgr\arfcn\Out\L1Manager.lib'
+  ==>  building archive 'F:\Codebase\Code_736\src\steMgr\arfcn\Out\L1Manager.lib'
+
+Build Complete,
+  0 Errors, 7 Warnings, 0 Remarks.

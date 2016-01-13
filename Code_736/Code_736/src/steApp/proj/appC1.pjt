@@ -1,0 +1,118 @@
+; Code Composer Project File, Version 2.0 (do not modify or remove this line)
+
+[Project Settings]
+ProjectDir="F:\santhosh\MemoryReorganize\Code654a+iipc_fix+code_opt+data_opt\code_654a+\Code\src\steApp\proj\"
+ProjectType=Executable
+CPUFamily=TMS320C64XX
+Tool="Compiler"
+Tool="CustomBuilder"
+Tool="DspBiosBuilder"
+Tool="Linker"
+Config="Debug"
+Config="Release"
+
+[Project Dependencies]
+Source="..\..\3rdparty\gsmL1\proj\gsmL1.pjt"
+Source="..\..\steDrv\platform\proj\Platformlib.pjt"
+Source="..\..\steLib\commandIf\proj\CmdIfLib.pjt"
+Source="..\..\steLib\genutil\proj\GenUtil.pjt"
+Source="..\..\steLib\gsmutil\proj\GSMUtil.pjt"
+Source="..\..\steMgr\arfcn\proj\L1Manager.pjt"
+Source="..\..\steMgr\commandIf\proj\CmdIfMgr.pjt"
+Source="..\..\steMgr\dataIf\proj\DataIf.pjt"
+Source="..\..\steMgr\status\proj\status.pjt"
+
+["..\..\3rdparty\gsmL1\proj\gsmL1.pjt" Settings]
+MatchConfigName=true
+
+["..\..\steDrv\platform\proj\Platformlib.pjt" Settings]
+MatchConfigName=true
+
+["..\..\steLib\commandIf\proj\CmdIfLib.pjt" Settings]
+MatchConfigName=true
+
+["..\..\steLib\genutil\proj\GenUtil.pjt" Settings]
+MatchConfigName=true
+
+["..\..\steLib\gsmutil\proj\GSMUtil.pjt" Settings]
+MatchConfigName=true
+
+["..\..\steMgr\arfcn\proj\L1Manager.pjt" Settings]
+MatchConfigName=true
+
+["..\..\steMgr\commandIf\proj\CmdIfMgr.pjt" Settings]
+MatchConfigName=true
+
+["..\..\steMgr\dataIf\proj\DataIf.pjt" Settings]
+MatchConfigName=true
+
+["..\..\steMgr\status\proj\status.pjt" Settings]
+MatchConfigName=true
+
+[Source Files]
+Source="..\..\3rdparty\gsmL1\out\GSML1.lib"
+Source="..\..\3rdparty\gsmL1\src\delcom_gsm_L1_modules.l64+"
+Source="..\..\3rdparty\TI\src\csl.lib"
+Source="..\..\3rdparty\TI\src\csl_c64xplus_intc.lib"
+Source="..\..\steDrv\platform\out\Platformlib.lib"
+Source="..\..\steLib\commandIf\out\CmdIfLib.lib"
+Source="..\..\steLib\genutil\out\GenUtil.lib"
+Source="..\..\steLib\gsmutil\out\GSMUtil.lib"
+Source="..\..\steMgr\arfcn\out\L1Manager.lib"
+Source="..\..\steMgr\commandIf\out\CmdIfMgr.lib"
+Source="..\src\CriticalMem.c"
+Source="..\src\EthBuff.c"
+Source="..\src\evminit.c"
+Source="..\src\HeapMem.c"
+Source="..\src\main.tcf"
+Source="..\src\MemMgr.c"
+Source="..\src\ModMgr.c"
+Source="..\src\maincfg.cmd"
+Source="appC1cfg.cmd"
+Source="appcfg.cmd"
+
+[Generated Files]
+Source="..\src\maincfg.s62"
+Source="..\src\maincfg_c.c"
+
+["Debug" Settings]
+InitialBuildCmd=.\prebuild.bat;Run=Always
+FinalBuildCmd=.\HexConversion.bat;Run=Always
+
+["Compiler" Settings: "Debug"]
+Options=-g -pm -pdr -o3 -fr"$(Proj_dir)\Debug" -i"$(Proj_dir)" -i"../../steLib/gsmutil/include" -i"../../steDrv/include" -i"..\..\..\include" -i"..\include\" -i"..\..\include" -i"..\..\..\steLib\gsmutil\include" -i"..\..\steLib\gsmutil\include" -i"..\..\..\steLib\genutil\include" -i"..\..\steLib\genutil\include" -i"..\..\steMgr\arfcn\include" -i"..\..\..\steMgr\arfcn\include" -i"..\..\..\3rdparty\gsmL1\include" -i"..\..\3rdparty\gsmL1\include" -i"..\..\..\steLib\commandIf\include" -i"..\..\steLib\commandIf\include" -i"..\..\..\steDrv\include" -i"..\..\stedrv\platform\include\" -i"..\..\..\steMgr\dataif\include" -i"..\..\steMgr\dataif\include" -i"..\..\..\stedrv\include\" -i"..\..\..\steMgr\Commandif\include" -i"..\..\steMgr\include" -i"..\..\steMgr\Commandif\include" -i"..\..\stemgr\diagif\include" -i"..\..\stemgr\status\include" -d"_CORE1" -mf5 -mv6400+ --gcc
+
+["Compiler" Settings: "Release"]
+Options=-pdr -o2 -fr"$(Proj_dir)\Release" -i"$(Proj_dir)" -i"." -d"_RELEASE" -mv6400+
+
+["DspBiosBuilder" Settings: "Debug"]
+Options=-Dconfig.importPath=".;../;%BIOS_INSTALL_DIR%/packages/ti/bios/examples/common;"
+
+["DspBiosBuilder" Settings: "Release"]
+Options=-Dconfig.importPath=".;../;%BIOS_INSTALL_DIR%/packages/ti/bios/examples/common;"
+
+["Linker" Settings: "Debug"]
+Options=-b -c -m".\Debug\Core1App.map" -o"..\out\appC1.out" -w -x -i"%BIOS_INSTALL_DIR%/packages/ti/rtdx/lib/c6000" -i"../../steLib/gsmutil/out" -i"../../../steDrv/include" -l"gsmutil.lib"
+
+["Linker" Settings: "Release"]
+Options=-c -m".\Release\main.map" -o".\Release\appC0.out" -w -x -i"%BIOS_INSTALL_DIR%/packages/ti/rtdx/lib/c6000"
+
+
+["..\src\maincfg.cmd" Settings: "Debug"]
+LinkOrder=3
+
+["..\src\maincfg.cmd" Settings: "Release"]
+LinkOrder=1
+
+["appC1cfg.cmd" Settings: "Debug"]
+LinkOrder=1
+
+["appC1cfg.cmd" Settings: "Release"]
+LinkOrder=1
+
+["appcfg.cmd" Settings: "Debug"]
+LinkOrder=2
+
+["appcfg.cmd" Settings: "Release"]
+LinkOrder=1
+

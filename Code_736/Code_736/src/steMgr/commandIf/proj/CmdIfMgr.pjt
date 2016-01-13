@@ -1,0 +1,40 @@
+; Code Composer Project File, Version 2.0 (do not modify or remove this line)
+
+[Project Settings]
+ProjectDir="F:\santhosh\MemoryReorganize\Code654a+iipc_fix+code_opt+data_opt\code_654a+\Code\src\steMgr\commandIf\proj\"
+ProjectType=Library
+CPUFamily=TMS320C64XX
+Tool="Archiver"
+Tool="Compiler"
+Tool="CustomBuilder"
+Tool="DspBiosBuilder"
+Config="Debug"
+Config="Release"
+
+[Project Dependencies]
+Source="..\..\..\steLib\commandIf\proj\CmdIfLib.pjt"
+
+["..\..\..\steLib\commandIf\proj\CmdIfLib.pjt" Settings]
+MatchConfigName=true
+
+[Source Files]
+Source="..\src\CmdIf.c"
+Source="..\src\CmdRouter.c"
+Source="..\src\CmdSim.c"
+Source="..\src\CmdSimDB.c"
+Source="..\testApp\TstCmdIf.c"
+Source="..\testApp\TstCmdIfC1.c"
+Source="..\testApp\TstCmdSim.c"
+
+["Archiver" Settings: "Debug"]
+Options=-r -o"..\Out\CmdIfMgr.lib"
+
+["Archiver" Settings: "Release"]
+Options=-r -o".\Release\InterfaceMgr.lib"
+
+["Compiler" Settings: "Debug"]
+Options=-g -pm -pdsw225 -o3 -fr"$(Proj_dir)\Debug" -i"..\..\..\include" -i"..\include" -i"..\..\..\steLib\genutil\include" -i"..\..\..\steLib\CommandIf\include" -i"..\..\..\steDrv\include" -i"..\..\..\steDrv\Platform\include" -i"..\..\..\steMgr\dataif\include" -i"..\..\..\steMgr\arfcn\include" -i"..\..\..\\3rdparty\gsmL1\include" -i"..\..\..\steLib\gsmutil\include" -i"..\..\Include" -i"..\..\diagif\include" -i"..\..\status\include" -d"_DEBUG" -ms0 -mf5 -mv6400 --gcc
+
+["Compiler" Settings: "Release"]
+Options=-pdsw225 -o3 -fr"$(Proj_dir)\Release" -mv6400
+

@@ -1,0 +1,7 @@
+Test sequence....
+itest: 0 args: 0 argv: x
+itest: 0 args: 1 argv: FCCH
+info_bits_length: 0, block_length: 8, multiframe: 51, interleaver_delay: 0, burstType: 2, phaseMode: 0
+itest: 1 args: 0 argv: x
+itest: 1 args: 1 argv: SCH
+info_bits_length: 25, block_le
